@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-exports.signup = (req, res, next) => {    // A finir
+exports.signup = (req, res, next) => {    // Erreur
         if (req.method == "POST") {
         let email = req.body.email;
         let sqlLogin = `SELECT users.email FROM users WHERE email = '${email}'`;
