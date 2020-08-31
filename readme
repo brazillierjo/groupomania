@@ -1,0 +1,63 @@
+backend > nodemon server
+
+Terminal SQL > 
+cd "C:\Program Files\MySQL\MySQL Server 8.0\bin"
+mysql -u root -p
+
+groupomania > 
+npm run serve
+
+
+*****************************************************
+TABLES SQL:
+
+users
+id         | smallint unsigned | NO   | PRI | NULL    | auto_increment
+email      | varchar(50)       | NO   |     | NULL
+password   | varchar(255)      | NO   |     | NULL
+first_name | varchar(20)       | YES  |     | NULL
+last_name  | varchar(20)       | YES  |     | NULL
+
+posts
+id          | smallint          | NO   | PRI | NULL    | auto_increment
+content     | varchar(280)      | YES  |     | NULL    |                
+imageUrl    | varchar(400)      | YES  |     | NULL    |                
+// likes       | smallint          | YES  |     | 0       |                
+post_create | datetime          | YES  |     | NULL    |                
+user_id     | smallint unsigned | YES  | MUL | NULL
+
+comments
+content      | varchar(280)      | NO   |     | NULL
+post_id      | smallint unsigned | NO   |     | NULL
+user_id      | smallint unsigned | NO   |     | NULL
+date_comment | date              | YES  |     | NULL
+id           | smallint unsigned | NO   | PRI | NULL    | auto_increment
+
+likes
+id      | smallint unsigned | NO   | PRI | NULL    | auto_increment 
+user_id | smallint unsigned | YES  | MUL | NULL    |                
+post_id | smallint          | YES  | MUL | NULL
+// likes
+// dislikes
+
+**********************************************
+ROUTES:
+user : 
+post /api/auth/signup
+post /api/auth/login
+put /api/auth/update
+get /api/auth/profile
+Delete /api/auth/delete
+
+publication:
+post /api/posts
+post /api/posts/:id/like/
+get /api/posts
+get /api/posts/:id // requete pour get les comments
+put /api/posts/:id
+delete /api/posts/:id
+
+comments:
+post /api/posts/:id/comments
+put /api/posts/:id/comments/:id
+delete /api/posts/:id/comments/:id
