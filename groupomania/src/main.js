@@ -1,22 +1,18 @@
 import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import axios from "axios";
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-const router = new VueRouter({
-  mode: 'history',
-  routes: [{
-    path: '/',
-    component: require('./components/login.vue')
-  }, {
-    path: '*',
-    redirect: '/'
-  }]
-})
+axios.defaults.baseURL = 'http://localhost:3000/api/';
+const token = sessionStorage.getItem('token')
+if (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+}
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#app',
   router,
-  render: h => h(require('./App.vue')),
+  render: h => h(App)
 }).$mount('#app')

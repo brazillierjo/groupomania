@@ -15,7 +15,7 @@
     <div class="sub-content">
       <div class="s-part">
         Pas encore de compte ?
-        <a href="#">Inscrivez-vous</a>
+        <router-link to="/signup">Inscrivez-vous</router-link>
       </div>
     </div>
   </div>
@@ -24,10 +24,9 @@
 
 
 <script>
-export default {
-  name: "login",
-};
+export default {};
 </script>
+
 
 
 <style>
