@@ -4,24 +4,78 @@
       <div class="header">
         <img src="../assets\icon-above-font.png" />
       </div>
-      <div class="l-part">
-        <input type="email" placeholder="E-mail" class="input-1" />
+      <form class method="post" @submit.prevent="postNow">
         <div class="overlap-text">
-          <input type="password" placeholder="Mot de passe" class="input-2" />
-          <input type="text" placeholder="Nom" class="input-2" />
-          <input type="text" placeholder="Prénom" class="input-2" />
+          <input
+            id="email"
+            type="email"
+            name
+            value
+            v-model="email"
+            placeholder="E-mail"
+            class="input-1"
+          />
+          <input
+            id="password"
+            type="password"
+            name
+            value
+            v-model="password"
+            placeholder="Mot de passe"
+            class="input-2"
+          />
+          <input
+            id="last_name"
+            type="text"
+            name
+            value
+            v-model="last_name"
+            placeholder="Nom"
+            class="input-2"
+          />
+          <input
+            id="first_name"
+            type="text"
+            name
+            value
+            v-model="first_name"
+            placeholder="Prénom"
+            class="input-2"
+          />
         </div>
-        <input type="button" value="S'inscire" class="btn" />
-      </div>
+        <button type="submit" name="button" class="btn">S'inscrire</button>
+      </form>
     </div>
   </div>
 </template>
 
-
-
 <script>
+const axios = require("axios").default;
 export default {
   name: "signup",
+  data() {
+    return {
+      email: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+      show: false,
+    };
+  },
+  method: {
+    postNow() {
+      axios.post("http://localhost:3000/api/auth/signup", {
+        email: this.email,
+        password: this.password,
+        first_name: this.first_name,
+        last_name: this.last_name,
+      }).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+  },
 };
 </script>
 
