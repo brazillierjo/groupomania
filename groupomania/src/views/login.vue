@@ -1,21 +1,40 @@
 <template>
-  <div id="wrapper">
-    <div class="main-content">
-      <div class="header">
-        <img src="../assets\icon-above-font.png" />
-      </div>
-      <div class="l-part">
-        <input type="email" placeholder="E-mail" class="input-1" />
-        <div class="overlap-text">
-          <input type="password" placeholder="Mot de passe" class="input-2" />
+  <div>
+    <headerLog />
+    <div id="wrapper">
+      <div class="main-content">
+        <div class="header">
+          <img src="../assets\icon-above-font.png" />
         </div>
-        <input type="button" value="Se connecter" class="btn" />
+        <form class method="post" v-on:submit.prevent="postNow">
+          <div class="overlap-text">
+            <input
+              id="email"
+              type="email"
+              name
+              value
+              v-model="email"
+              placeholder="E-mail"
+              class="input-1"
+            />
+            <input
+              id="password"
+              type="password"
+              name
+              value
+              v-model="password"
+              placeholder="Mot de passe"
+              class="input-2"
+            />
+          </div>
+          <button type="submit" name="button" class="btn">Se connecter</button>
+        </form>
       </div>
-    </div>
-    <div class="sub-content">
-      <div class="s-part">
-        Pas encore de compte ?
-        <router-link to="/signup">Inscrivez-vous</router-link>
+      <div class="sub-content">
+        <div class="s-part">
+          Don't have an account?
+          <router-link to="signup">Inscrivez-vous</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -24,7 +43,38 @@
 
 
 <script>
-export default {};
+const axios = require("axios").default;
+
+import headerLog from "@/components/headerLog.vue";
+
+export default {
+  name: "login",
+  components: {
+    headerLog,
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    postNow() {
+      axios
+        .post("http://localhost:3000/api/auth/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          console.log(response);
+          location.href = "/api/posts";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 
 

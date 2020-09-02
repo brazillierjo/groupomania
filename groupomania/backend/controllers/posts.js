@@ -5,7 +5,7 @@ exports.createPosts = (req, res, next) => {
     if (req.method == "POST") {
         let imageUrl = req.body.imageUrl;
         let content = req.body.content;
-        let user_id = req.body.userId;
+        let user_id = req.body.user_id;
         let postSQL = `INSERT INTO posts (imageUrl, content, user_id, post_create) VALUES ('${imageUrl}', '${content}', '${user_id}', NOW());`;
         sql.query(postSQL, function (err, result) {
             if (result) {

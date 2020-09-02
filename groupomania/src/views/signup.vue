@@ -1,58 +1,67 @@
 <template>
-  <div id="wrapper">
-    <div class="main-content">
-      <div class="header">
-        <img src="../assets\icon-above-font.png" />
-      </div>
-      <form class method="post" @submit.prevent="postNow">
-        <div class="overlap-text">
-          <input
-            id="email"
-            type="email"
-            name
-            value
-            v-model="email"
-            placeholder="E-mail"
-            class="input-1"
-          />
-          <input
-            id="password"
-            type="password"
-            name
-            value
-            v-model="password"
-            placeholder="Mot de passe"
-            class="input-2"
-          />
-          <input
-            id="last_name"
-            type="text"
-            name
-            value
-            v-model="last_name"
-            placeholder="Nom"
-            class="input-2"
-          />
-          <input
-            id="first_name"
-            type="text"
-            name
-            value
-            v-model="first_name"
-            placeholder="Prénom"
-            class="input-2"
-          />
+  <div>
+    <headerLog />
+    <div id="wrapper">
+      <div class="main-content">
+        <div class="header">
+          <img src="../assets\icon-above-font.png" />
         </div>
-        <button type="submit" name="button" class="btn">S'inscrire</button>
-      </form>
+        <form class method="post" v-on:submit.prevent="postNow">
+          <div class="overlap-text">
+            <input
+              id="email"
+              type="email"
+              name
+              value
+              v-model="email"
+              placeholder="E-mail"
+              class="input-1"
+            />
+            <input
+              id="password"
+              type="password"
+              name
+              value
+              v-model="password"
+              placeholder="Mot de passe"
+              class="input-2"
+            />
+            <input
+              id="last_name"
+              type="text"
+              name
+              value
+              v-model="last_name"
+              placeholder="Nom"
+              class="input-2"
+            />
+            <input
+              id="first_name"
+              type="text"
+              name
+              value
+              v-model="first_name"
+              placeholder="Prénom"
+              class="input-2"
+            />
+          </div>
+          <button type="submit" name="button" class="btn">S'inscrire</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 const axios = require("axios").default;
+
+import headerLog from "@/components/headerLog.vue";
+
 export default {
   name: "signup",
+  components: {
+    headerLog,
+  },
   data() {
     return {
       email: "",
@@ -62,7 +71,7 @@ export default {
       show: false,
     };
   },
-  method: {
+  methods: {
     postNow() {
       axios
         .post("http://localhost:3000/api/auth/signup", {
