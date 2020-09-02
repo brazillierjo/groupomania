@@ -64,16 +64,19 @@ export default {
   },
   method: {
     postNow() {
-      axios.post("http://localhost:3000/api/auth/signup", {
-        email: this.email,
-        password: this.password,
-        first_name: this.first_name,
-        last_name: this.last_name,
-      }).then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
+      axios
+        .post("http://localhost:3000/api/auth/signup", {
+          email: this.email,
+          password: this.password,
+          first_name: this.first_name,
+          last_name: this.last_name,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
