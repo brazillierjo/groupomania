@@ -19,8 +19,7 @@ export default {
   components: {
     headerPosts,
   },
-  methods: {
-    getPosts() {
+  beforeMount() {
       axios
         .get("http://localhost:3000/api/posts")
         .then((response) => {
@@ -29,10 +28,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
-  },
-  beforeMount() {
-    this.getPosts;
   },
 };
 </script>
