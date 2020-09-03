@@ -67,7 +67,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          location.href = "/api/posts";
+          location.href = "/posts";
         })
         .catch((error) => {
           console.log(error);

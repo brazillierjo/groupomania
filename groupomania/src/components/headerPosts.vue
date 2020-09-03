@@ -1,16 +1,16 @@
-<template>
+ <template>
   <header>
-      <img class="logo-header-log" src="../assets\banner-groupomania.png" />
+    <img class="logo-header-log" src="../assets\banner-groupomania.png" />
     <nav>
-      <router-link to="/">Se connecter</router-link>|
-      <router-link to="/Signup">S'inscrire</router-link>
+      <router-link to="/account">Mon compte</router-link>|
+      <router-link to="/myposts">Mes publications</router-link>
     </nav>
   </header>
 </template>
 
 <script>
 export default {
-  name: "headerLog",
+  name: "headerPosts",
 };
 </script>
 

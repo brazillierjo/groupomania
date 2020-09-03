@@ -22,7 +22,6 @@ posts
 id          | smallint          | NO   | PRI | NULL    | auto_increment
 content     | varchar(280)      | YES  |     | NULL    |                
 imageUrl    | varchar(400)      | YES  |     | NULL    |                
-// likes       | smallint          | YES  |     | 0       |                
 post_create | datetime          | YES  |     | NULL    |                
 user_id     | smallint unsigned | YES  | MUL | NULL
 
@@ -37,8 +36,8 @@ likes
 id      | smallint unsigned | NO   | PRI | NULL    | auto_increment 
 user_id | smallint unsigned | YES  | MUL | NULL    |                
 post_id | smallint          | YES  | MUL | NULL
-// likes
-// dislikes
+likes
+dislikes
 
 **********************************************
 ROUTES:
