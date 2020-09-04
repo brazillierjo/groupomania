@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-exports.signup = (req, res, next) => {    // Erreur
+exports.signup = (req, res, next) => {    // Erreur + TOKEN ?
         if (req.method == "POST") {
         let email = req.body.email;
         let sqlLogin = `SELECT users.email FROM users WHERE email = '${email}'`;
@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {    // Erreur
                     let sqlSignup = "INSERT INTO users (email, password, first_name, last_name) VALUES ('" + email + "', '" + hash + "', '" + first_name + "', '" + last_name + "')"
                     sql.query(sqlSignup, function (err, result) {
                         if (!err) {
-                            res.status(200).json({ message: "L'utilisateur a bien été créé !" })
+                            return res.status(200).json({ message: "L'utilisateur a bien été créé !" })
                         } else {
                             console.log(err)
                         }
@@ -59,8 +59,8 @@ exports.login = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
     if (req.method == "DELETE") {
-        let email = encodeURI(req.body.email);
-        let deleteUser = `DELETE FROM users WHERE email = '${email}'`;
+        let userId = req.params.id;
+        let deleteUser = `DELETE FROM users WHERE id = '${userId}'`;
         sql.query(deleteUser, function (err) {
             if (!err) {
                 res.status(200).json({ message: "L'utilisateur a bien été supprimé !" })
@@ -74,6 +74,7 @@ exports.delete = (req, res, next) => {
 exports.modify = (req, res, next) => {
     if (req.method == "PUT") {
         let email = encodeURI(req.body.email);
+        let userId = req.params.id;
         let firstName = req.body.first_name;
         let lastName = req.body.last_name;
         let updateUser = `UPDATE users SET first_name = '${firstName}', last_name = '${lastName}' WHERE email = '${email}';`;

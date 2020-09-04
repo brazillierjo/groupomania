@@ -57,6 +57,7 @@ const axios = require("axios").default;
 
 import headerLog from "@/components/headerLog.vue";
 
+
 export default {
   name: "signup",
   components: {
@@ -68,7 +69,6 @@ export default {
       password: "",
       first_name: "",
       last_name: "",
-      show: false,
     };
   },
   methods: {
@@ -82,9 +82,16 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          sessionStorage.setItem("token", response.data.token);
+          this.$axios.defaults.headers.common["Authorization"] =
+            "Bearer " + response.data.token;
+          //location.href = "/posts";
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((e) => {
+          if (e.response.status === 500) {
+            this.message = "Erreur serveur";
+          }
+          sessionStorage.removeItem("token");
         });
     },
   },

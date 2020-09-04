@@ -11,7 +11,7 @@ exports.createPosts = (req, res, next) => {
             if (result) {
                 res.status(200).json({ message: "La publication a bien été postée !" })
             } else {
-                res.status(401).json({ message: "Error" })
+                res.status(401).json({ err })
             }
         })
     }
@@ -19,7 +19,7 @@ exports.createPosts = (req, res, next) => {
 
 exports.getAllPosts = (req, res, next) => {
     if (req.method == "GET") {
-        let allPostReq = "SELECT * FROM posts";
+        let allPostReq = "SELECT * FROM posts INNER JOIN users ON posts.user_id = users.id;";
         sql.query(allPostReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -76,7 +76,7 @@ exports.deletePosts = (req, res, next) => {
 exports.postComments = (req, res, next) => { //erreur
     if (req.method == "POST") {
         let postContent = req.params.content;
-        let user_id = req.params.userId;
+        let user_id = req.params.user_id;
         let SQLComments = `INSERT INTO comments (content, user_id) VALUES ('${postContent}', '${user_id}', NOW());`;
         sql.query(SQLComments, function (err, result) {
             if (result) {
@@ -91,7 +91,7 @@ exports.postComments = (req, res, next) => { //erreur
 exports.modifyComments = (req, res, next) => { //erreur
     if (req.method == "PUT") {
         let modifyComments = req.params.content;
-        let user_id = req.params.userId;
+        let user_id = req.params.user_id;
         let SQLModifyComments = `INSERT INTO comments (content, user_id) VALUES ('${postContent}', '${user_id}', NOW());`;
         sql.query(SQLModifyComments, function (err, result) {
             if (result) {
@@ -119,7 +119,7 @@ exports.deleteComments = (req, res, next) => {
 
 exports.postLikes = (req, res, next) => { // A finir
     if (req.method == "POST") {
-        let bodyId = req.body.userId;
+        let bodyId = req.body.user_id;
         let postId = req.params.id;
         let ifExist = `SELECT IF (EXISTS (SELECT * FROM likes WHERE user_id = ${bodyId} AND post_id = ${postId}) 1, 0)`;
         sql.query(ifExist, function (err, result) {

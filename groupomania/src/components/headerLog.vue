@@ -1,6 +1,6 @@
 <template>
   <header>
-      <img class="logo-header-log" src="../assets\banner-groupomania.png" />
+    <img class="logo-header-log" src="../assets\banner-groupomania.png" />
     <nav>
       <router-link to="/">Se connecter</router-link>|
       <router-link to="/Signup">S'inscrire</router-link>
@@ -22,7 +22,7 @@ export default {
 }
 
 header {
-  background-color: rgba(211, 211, 211, 0.836);
+  background-color: white;
   border-radius: 20px;
   width: 90%;
   margin-left: auto;
@@ -32,6 +32,8 @@ header {
 }
 
 nav {
+  display: flex;
+  justify-content: space-between;
   vertical-align: middle;
   text-align: center;
   margin-left: auto;

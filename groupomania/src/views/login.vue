@@ -67,10 +67,19 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          sessionStorage.setItem("token", response.data.token);
+          this.$axios.defaults.headers.common["Authorization"] =
+            "Bearer " + response.data.token;
           location.href = "/posts";
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status === 401) {
+            this.message = "Email ou mot de passe invalide";
+          }
+          if (error.response.status === 500) {
+            this.message = "Erreur serveur";
+          }
+          sessionStorage.removeItem("token");
         });
     },
   },

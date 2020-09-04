@@ -36,17 +36,17 @@ likes
 id      | smallint unsigned | NO   | PRI | NULL    | auto_increment 
 user_id | smallint unsigned | YES  | MUL | NULL    |                
 post_id | smallint          | YES  | MUL | NULL
-likes
-dislikes
+likes   | INT | NO   
+dislikes| INT | NO
 
 **********************************************
 ROUTES:
 user : 
 post /api/auth/signup
 post /api/auth/login
-put /api/auth/update
-get /api/auth/profile
-Delete /api/auth/delete
+put /api/auth/update/:id
+get /api/auth/profile/:id
+Delete /api/auth/delete/:id
 
 publication:
 post /api/posts
