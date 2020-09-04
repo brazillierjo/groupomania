@@ -57,7 +57,6 @@ const axios = require("axios").default;
 
 import headerLog from "@/components/headerLog.vue";
 
-
 export default {
   name: "signup",
   components: {
@@ -85,7 +84,7 @@ export default {
           sessionStorage.setItem("token", response.data.token);
           this.$axios.defaults.headers.common["Authorization"] =
             "Bearer " + response.data.token;
-          //location.href = "/posts";
+          location.href = "/posts";
         })
         .catch((e) => {
           if (e.response.status === 500) {

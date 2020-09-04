@@ -20,11 +20,12 @@ export default {
 .container-comments {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 30px;
   background-color: white;
   width: 50%;
   border: 1px solid grey;
+  border-radius: 5px;
 }
 
 .user_id {
@@ -41,7 +42,8 @@ export default {
   padding: 2px;
   border-radius: 10px;
   width: 60%;
-  height: 20px;
+  height: 30px;
+  margin-top: 5px;
 }
 
 .send-comment {

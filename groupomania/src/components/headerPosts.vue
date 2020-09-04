@@ -4,8 +4,8 @@
       <img class="logo-header-log" src="../assets\banner-groupomania.png" />
       <hr />
       <nav>
-        <router-link to="/account">Mon compte</router-link>
-        <router-link to="/myposts">Mes publications</router-link>
+        <router-link to="account">Mon compte</router-link>
+        <router-link to="myposts">Mes publications</router-link>
         <a class="disconnect" href="#" v-on:click="disconnect">Se déconnecter</a>
       </nav>
     </header>

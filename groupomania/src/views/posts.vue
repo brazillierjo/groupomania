@@ -23,8 +23,7 @@
           <i class="fas fa-comments"></i>
         </button>
       </div>
-          <comments v-if="showComments" />
-
+      <comments v-if="showComments" />
     </div>
   </div>
 </template>

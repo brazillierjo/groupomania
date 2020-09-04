@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import login from '../views/login.vue'
 import signup from '../views/signup.vue'
 import posts from '../views/posts.vue'
+import account from '../views/account.vue'
 
 Vue.use(VueRouter)
 
@@ -27,11 +28,11 @@ const routes = [
   //   name: 'postsID',
   //   component: postsID
   // },
-  // {
-  //   path: '/Profile/:id',
-  //   name: 'Profile',
-  //   component: Profile
-  // }
+  {
+    path: '/account/:id',
+    name: 'account',
+    component: account
+  }
 ]
 
 const router = new VueRouter({

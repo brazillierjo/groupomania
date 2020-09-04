@@ -8,3 +8,4 @@ Ajouter suppression des images lors du delete ou modify
 Frontend :
 Page mon compte avec suppression et modification
 Page profil avec affichage de toutes les publications du user connecté
+Publier du contenu

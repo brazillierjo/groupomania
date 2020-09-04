@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <headerPosts />
-    <div class="profile"></div>
+    <div class="profile">
+      <h1>Mon profil</h1>
+    </div>
     </div>
 </template>
 
@@ -22,7 +24,7 @@ export default {
   beforeMount() {
     axios
       .get("http://localhost:3000/api/auth/profile/:id")
-      .then((reponse) => {
+      .then((response) => {
         console.log(response);
       })
       .catch((error) => {
