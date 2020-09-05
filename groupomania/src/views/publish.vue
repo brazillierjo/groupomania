@@ -1,40 +1,26 @@
 <template>
   <div>
-    <headerLog />
+    <headerPosts />
     <div id="wrapper">
       <div class="main-content">
-        <div class="header">
-          <img src="../assets\icon-above-font.png" />
-        </div>
         <form class method="post" v-on:submit.prevent="postNow">
           <div class="overlap-text">
             <input
-              id="email"
-              type="email"
+              id="content"
+              type="content"
               name
               value
-              v-model="email"
-              placeholder="E-mail"
+              v-model="content"
+              placeholder="Description"
               class="input-1"
             />
-            <input
-              id="password"
-              type="password"
-              name
-              value
-              v-model="password"
-              placeholder="Mot de passe"
-              class="input-2"
-            />
+            <div class="import-file">
+              <input type="file" />
+              <button @click="postNow"></button>
+            </div>
           </div>
-          <button type="submit" name="button" class="btn">Se connecter</button>
+          <input type="submit" name="upload" class="btn" />
         </form>
-      </div>
-      <div class="sub-content">
-        <div class="s-part">
-          Don't have an account?
-          <router-link to="signup">Inscrivez-vous</router-link>
-        </div>
       </div>
     </div>
   </div>
@@ -43,46 +29,38 @@
 
 
 <script>
-import headerLog from "@/components/headerLog.vue";
+import headerPosts from "@/components/headerPosts.vue";
 
 export default {
-  name: "login",
-  components: {
-    headerLog,
-  },
+  name: "posts",
   data() {
     return {
-      email: "",
-      password: "",
-      user_id: "",
-      token_user: "",
+      content: "",
+      imageUrl: "",
+      selectedFile: null,
     };
+  },
+  components: {
+    headerPosts,
   },
   methods: {
     postNow() {
       this.$axios
-        .post("http://localhost:3000/api/auth/login", {
-          email: this.email,
-          password: this.password,
-          id: this.user_id,
-          token_user: this.token_user,
+        .post(`http://localhost:3000/api/post`, {
+          content: this.content,
+          imageUrl: (this.selectedFile = event.target.files[0]),
         })
         .then((response) => {
           console.log(response);
-          sessionStorage.setItem('token_user', response.data.token_user)
-          sessionStorage.setItem("token", response.data.token);
-          this.$axios.defaults.headers.common["Authorization"] =
-            "Bearer " + response.data.token;
           location.href = "/posts";
         })
         .catch((error) => {
           if (error.response.status === 401) {
-            this.message = "Email ou mot de passe invalide";
+            this.message = "Erreur dans la publication";
           }
           if (error.response.status === 500) {
             this.message = "Erreur serveur";
           }
-          sessionStorage.removeItem("token");
         });
     },
   },
@@ -103,8 +81,7 @@ body {
 }
 
 #wrapper {
-  width: 50%;
-  height: 50%;
+  width: 70%;
   overflow: hidden;
   border: 0px solid #000;
   margin: 50px auto;
@@ -120,11 +97,6 @@ body {
   padding: 40px 50px;
 }
 
-.header {
-  border: 0px solid #000;
-  margin-bottom: 5px;
-}
-
 .header img {
   width: 175px;
   margin-left: auto;
@@ -134,7 +106,7 @@ body {
 .input-1,
 .input-2 {
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 30px;
   padding: 8px 12px;
   border: 1px solid #dbdbdb;
   box-sizing: border-box;
@@ -193,5 +165,24 @@ body {
 
 input:focus {
   background-color: lightgrey;
+}
+
+#custom-button {
+  padding: 10px;
+  color: white;
+  background-color: #009578;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#custom-button:hover {
+  background-color: #00b28f;
+}
+
+.import-file {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  margin-bottom: 30px;
 }
 </style>

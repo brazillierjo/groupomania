@@ -1,7 +1,8 @@
 <template>
   <div>
     <headerPosts />
-    <div v-for="post in posts" :key="post" class="post-comments">
+    <addPost />
+    <div v-for="post in posts" :key="post.id" class="post-comments">
       <div class="container-post">
         <div class="header-post">
           <div class="user-id">{{ post.first_name + ' ' + post.last_name }}</div>
@@ -29,10 +30,9 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 import headerPosts from "@/components/headerPosts.vue";
 import comments from "@/components/comments.vue";
+import addPost from "@/components/addPost.vue";
 
 export default {
   name: "posts",
@@ -45,9 +45,10 @@ export default {
   components: {
     headerPosts,
     comments,
+    addPost,
   },
   beforeMount() {
-    axios
+    this.$axios
       .get("http://localhost:3000/api/posts")
       .then((response) => (this.posts = response.data.result))
       .catch((error) => {
@@ -58,22 +59,26 @@ export default {
 </script>
 
 <style>
+* {
+  font-family: "Open Sans Condensed", sans-serif;
+}
+
 .container-post {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
   background-color: white;
   width: 50%;
-  border: 1px solid grey;
-  border-radius: 5px;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
 }
 
 .header-post {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  border: 1px solid grey;
-  border-radius: 5px;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
 }
 
 .user-id {
@@ -93,12 +98,12 @@ export default {
 .post-content {
   text-align: left;
   padding: 10px;
-  border: 1px solid grey;
-  border-radius: 5px;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
 }
 
 .like-comments {
-  margin-top: 10px;
+  margin-top: 1px;
   display: flex;
   margin-left: auto;
   margin-right: auto;
@@ -108,8 +113,10 @@ export default {
 .like,
 .dislike,
 .see-comments {
-  width: 30px;
-  border-radius: 3px;
+  background-color: white;
+  width: 50px;
+  height: 30px;
+  border-radius: 2px;
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -117,7 +124,7 @@ export default {
 .fa-thumbs-up,
 .fa-thumbs-down,
 .fa-comments {
-  width: 50%;
+font-size: 1.3em;
 }
 
 .fa-thumbs-up {

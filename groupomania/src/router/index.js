@@ -4,6 +4,8 @@ import login from '../views/login.vue'
 import signup from '../views/signup.vue'
 import posts from '../views/posts.vue'
 import account from '../views/account.vue'
+import myPosts from '../views/myPosts.vue'
+import publish from '../views/publish.vue'
 
 Vue.use(VueRouter)
 
@@ -23,15 +25,20 @@ const routes = [
     name: 'posts',
     component: posts
   },
-  // {
-  //   path: '/posts/:id',
-  //   name: 'postsID',
-  //   component: postsID
-  // },
   {
-    path: '/account/:id',
+    path: '/myposts/:token_user',
+    name: 'myPosts',
+    component: myPosts
+  },
+  {
+    path: '/account/:token_user',
     name: 'account',
     component: account
+  },
+  {
+    path: '/publish',
+    name: 'publish',
+    component: publish
   }
 ]
 

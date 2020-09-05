@@ -1,11 +1,11 @@
 Routes à modifier/faire : 
-
 user signup - Ajout token + mail unique
 post comment - erreur
 like et dislike à finir
 Ajouter suppression des images lors du delete ou modify
 
 Frontend :
-Page mon compte avec suppression et modification
-Page profil avec affichage de toutes les publications du user connecté
+mettre :id en dynamique sur routes sur front
+Page mon compte avec suppression et modification :id
+Page profil avec affichage de toutes les publications du user connecté :id
 Publier du contenu

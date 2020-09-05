@@ -24,13 +24,14 @@ export default {
   margin-bottom: 30px;
   background-color: white;
   width: 50%;
-  border: 1px solid grey;
-  border-radius: 5px;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
 }
 
 .user_id {
-  padding: 5px;
-  width: 40%;
+  padding: 10px;
+  width: 30%;
+  text-align: left;
 }
 
 .textarea-container {

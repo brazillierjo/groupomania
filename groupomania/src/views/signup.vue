@@ -53,8 +53,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 import headerLog from "@/components/headerLog.vue";
 
 export default {
@@ -68,19 +66,22 @@ export default {
       password: "",
       first_name: "",
       last_name: "",
+      user_token: "",
     };
   },
   methods: {
     postNow() {
-      axios
+      this.$axios
         .post("http://localhost:3000/api/auth/signup", {
           email: this.email,
           password: this.password,
           first_name: this.first_name,
           last_name: this.last_name,
+          user_token: this.user_token,
         })
         .then((response) => {
           console.log(response);
+          sessionStorage.setItem("token_user", response.data.token_user);
           sessionStorage.setItem("token", response.data.token);
           this.$axios.defaults.headers.common["Authorization"] =
             "Bearer " + response.data.token;
@@ -102,6 +103,7 @@ export default {
 * {
   margin: 0px;
   padding: 0px;
+  font-family: "Open Sans Condensed", sans-serif;
 }
 
 body {
@@ -158,7 +160,6 @@ body {
   color: #003569;
   font-size: 14px;
   text-decoration: none;
-  font-family: "Overpass Mono", monospace;
 }
 
 .btn {
@@ -170,7 +171,6 @@ body {
   font-weight: bold;
   cursor: pointer;
   border-radius: 3px;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sub-content {
@@ -180,7 +180,6 @@ body {
   border: 1px solid #e6e6e6;
   padding: 20px 50px;
   background-color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .s-part {
@@ -191,7 +190,6 @@ body {
   text-decoration: none;
   cursor: pointer;
   color: #3897f0;
-  font-family: "Overpass Mono", monospace;
   word-spacing: -3px;
   letter-spacing: -2px;
   font-weight: normal;

@@ -2,38 +2,34 @@ const sql = require('../mysql');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
+const { v4: uuidv4 } = require('uuid');
 
-exports.signup = (req, res, next) => {    // Erreur + TOKEN ?
-        if (req.method == "POST") {
+exports.signup = (req, res, next) => {    // TOKEN + TOKEN USER ?
+    if (req.method == "POST") {
         let email = req.body.email;
-        let sqlLogin = `SELECT users.email FROM users WHERE email = '${email}'`;
-        sql.query(sqlLogin, function (err, result) {
-            if (result.lenght > 0) {
-                res.status(409).json({ message: "User déjà créé !" })
-            } else {
-                let email = req.body.email;
-                let password = req.body.password;
-                let first_name = req.body.first_name;
-                let last_name = req.body.last_name;
-                bcrypt.hash(password, 10, function (err, hash) {
-                    let sqlSignup = "INSERT INTO users (email, password, first_name, last_name) VALUES ('" + email + "', '" + hash + "', '" + first_name + "', '" + last_name + "')"
-                    sql.query(sqlSignup, function (err, result) {
-                        if (!err) {
-                            return res.status(200).json({ message: "L'utilisateur a bien été créé !" })
-                        } else {
-                            console.log(err)
-                        }
-                    })
-                })
-            }
+        let password = req.body.password;
+        let first_name = req.body.first_name;
+        let last_name = req.body.last_name;
+        let token_user = uuidv4();
+
+        bcrypt.hash(password, 10, function (err, hash) {
+            let sqlSignup = `INSERT INTO users (email, password, first_name, last_name, token_user) VALUES ('${email}', '${hash}', '${first_name}', '${last_name}', '${token_user}')`;
+            sql.query(sqlSignup, function (err, result) {
+                if (!err) {
+                    res.status(200).json({ message: 'User créé !' })
+                } else {
+                    console.log(err)
+                    res.status(401).json({ message: 'Compte utilisateur non créé !' })
+                }
+            })
         })
     }
-};
+}
 
 exports.login = (req, res, next) => {
     if (req.method == "POST") {
         let email = req.body.email;
-        let sqlLogin = `SELECT users.email, users.password FROM users WHERE email = '${email}'`;
+        let sqlLogin = `SELECT users.email, users.password, users.id, users.token_user FROM users WHERE email = '${email}'`;
         sql.query(sqlLogin, function (err, result) {
             if (err) {
                 throw err;
@@ -45,7 +41,9 @@ exports.login = (req, res, next) => {
                 let hash = bcrypt.compareSync(req.body.password, result[0].password)
                 if (hash) {
                     return res.status(200).json({
-                        token: jwt.sign({ userId: result[0].id },
+                        user_id: result[0].id,
+                        token_user: result[0].token_user,
+                        token: jwt.sign({ user_id: result[0].id },
                             process.env.JWT_TOKEN,
                             { expiresIn: '24h' })
                     })

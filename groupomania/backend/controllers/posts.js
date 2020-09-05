@@ -32,8 +32,8 @@ exports.getAllPosts = (req, res, next) => {
 
 exports.getOnePosts = (req, res, next) => {
     if (req.method == "GET") {
-        let postId = req.params.id;
-        let onePostsReq = `SELECT * FROM posts WHERE id = '${postId}'`;
+        let token_user = req.params.token_user;
+        let onePostsReq = `SELECT * FROM posts INNER JOIN users WHERE posts.user_id = users.id;`;
         sql.query(onePostsReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
