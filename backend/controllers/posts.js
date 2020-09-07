@@ -3,9 +3,9 @@ const fs = require('fs');
 
 exports.createPosts = (req, res, next) => {
     if (req.method == "POST") {
+        let token_user = sessionStorage.getItem('token_user'); 
         let imageUrl = req.body.imageUrl;
         let content = req.body.content;
-        let token_user = sessionStorage.getItem('token_user');
         let postSQL = `INSERT INTO posts (imageUrl, content, token_user, post_create) VALUES ('${imageUrl}', '${content}', '${token_user}', NOW());`;
         sql.query(postSQL, function (err, result) {
             if (result) {
@@ -18,8 +18,9 @@ exports.createPosts = (req, res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
+    let token_user = sessionStorage.getItem('token_user'); 
     if (req.method == "GET") {
-        let allPostReq = "SELECT * FROM posts INNER JOIN users ON posts.user_id = users.id;";
+        let allPostReq = `SELECT * FROM posts INNER JOIN users ON posts.token_user = '${token_user}';`;
         sql.query(allPostReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -136,7 +137,7 @@ exports.postLikes = (req, res, next) => { // A finir
                     })
                 case 1:
                     console.log(result + ' 1')
-    
+
                 default:
                     console.log(result + ' default')
                     return res.status(404).json({ message: 'Erreur !' })
