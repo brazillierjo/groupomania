@@ -1,5 +1,4 @@
 Routes à modifier/faire : 
-user signup - Ajout token + mail unique
 post comment - erreur
 like et dislike à finir
 Ajouter suppression des images lors du delete ou modify

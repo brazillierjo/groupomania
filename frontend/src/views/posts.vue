@@ -38,7 +38,7 @@ export default {
   name: "posts",
   data: () => {
     return {
-      showComments: true,
+      showComments: false,
       posts: [],
     };
   },
@@ -49,7 +49,7 @@ export default {
   },
   beforeMount() {
     this.$axios
-      .get("http://localhost:3000/api/posts")
+      .get(`http://localhost:3000/api/posts/`)
       .then((response) => (this.posts = response.data.result))
       .catch((error) => {
         console.log(error);
@@ -124,7 +124,7 @@ export default {
 .fa-thumbs-up,
 .fa-thumbs-down,
 .fa-comments {
-font-size: 1.3em;
+  font-size: 1.3em;
 }
 
 .fa-thumbs-up {

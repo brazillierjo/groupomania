@@ -18,9 +18,8 @@ exports.createPosts = (req, res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-    let token_user = sessionStorage.getItem('token_user'); 
     if (req.method == "GET") {
-        let allPostReq = `SELECT * FROM posts INNER JOIN users ON posts.token_user = '${token_user}';`;
+        let allPostReq = `SELECT users.first_name, users.last_name, posts.post_create, posts.content FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
         sql.query(allPostReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -34,7 +33,7 @@ exports.getAllPosts = (req, res, next) => {
 exports.getOnePosts = (req, res, next) => {
     if (req.method == "GET") {
         let token_user = req.params.token_user;
-        let onePostsReq = `SELECT * FROM posts INNER JOIN users WHERE posts.token_user = ${token_user};`;
+        let onePostsReq = `SELECT users.first_name, users.last_name, posts.post_create, posts.content FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE users.token_user = '${token_user}';`;
         sql.query(onePostsReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })

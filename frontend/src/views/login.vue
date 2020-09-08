@@ -70,7 +70,9 @@ export default {
         .then((response) => {
           console.log(response);
           sessionStorage.setItem('token_user', response.data.token_user)
-          sessionStorage.setItem("token", response.data.token);
+          sessionStorage.setItem('token', response.data.token);          
+          // sessionStorage.setItem('token_user', response.data.token_user)
+          // sessionStorage.setItem('token', response.data.token);
           this.$axios.defaults.headers.common["Authorization"] =
             "Bearer " + response.data.token;
           location.href = "/posts";

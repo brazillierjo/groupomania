@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const { v4: uuidv4 } = require('uuid');
 
-exports.signup = (req, res, next) => {    // TOKEN + TOKEN USER ?
+exports.signup = (req, res, next) => {
     if (req.method == "POST") {
         let email = req.body.email;
         let password = req.body.password;
@@ -16,7 +16,29 @@ exports.signup = (req, res, next) => {    // TOKEN + TOKEN USER ?
             let sqlSignup = `INSERT INTO users (email, password, first_name, last_name, token_user) VALUES ('${email}', '${hash}', '${first_name}', '${last_name}', '${token_user}')`;
             sql.query(sqlSignup, function (err, result) {
                 if (!err) {
-                    res.status(200).json({ message: 'User créé !' })
+                    let sqlLogin = `SELECT users.email, users.password, users.id, users.token_user FROM users WHERE email = '${email}'`;
+                    sql.query(sqlLogin, function (err, result) {
+                        if (err) {
+                            throw err;
+                        }
+                        if (result.length == 0) {
+                            return res.status(401).json({ message: 'Aucun user trouvé !' })
+                        }
+                        else {
+                            let hash = bcrypt.compareSync(req.body.password, result[0].password)
+                            if (hash) {
+                                return res.status(200).json({
+                                    user_id: result[0].id,
+                                    token_user: result[0].token_user,
+                                    token: jwt.sign({ user_id: result[0].id },
+                                        process.env.JWT_TOKEN,
+                                        { expiresIn: '24h' })
+                                })
+                            } else {
+                                return res.status(403).json({ message: 'Mauvais mot de passe !' })
+                            }
+                        }
+                    })
                 } else {
                     console.log(err)
                     res.status(401).json({ message: 'Compte utilisateur non créé !' })

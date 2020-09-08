@@ -1,12 +1,10 @@
 backend > nodemon server
 
+frontend > npm run serve
+
 Terminal SQL > 
 cd "C:\Program Files\MySQL\MySQL Server 8.0\bin"
 mysql -u root -p
-
-groupomania > 
-npm run serve
-
 
 *****************************************************
 TABLES SQL:
