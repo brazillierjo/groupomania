@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <headerPosts />
+    <div class="profile">
+      <h1>Mes publications</h1>
+    </div>
     <div v-for="post in posts" :key="post.id" class="post-comments">
       <div class="container-post">
         <div class="header-post">

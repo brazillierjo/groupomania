@@ -3,8 +3,9 @@
     <header>
       <img class="logo-header-log" src="../assets\banner-groupomania.png" />
       <nav>
-        <router-link to="account">Mon compte</router-link>
-        <router-link :to="{ name: 'myPosts', params: { token_user: token_user  }}">Mes publications</router-link>
+        <router-link :to="{ name: 'posts'}">Acceuil</router-link>
+        <router-link :to="{ name: 'account', params: { token_user: token_user }}">Mon compte</router-link>
+        <router-link :to="{ name: 'myPosts', params: { token_user: token_user }}">Mes publications</router-link>
         <a class="disconnect" href="#" v-on:click="disconnect">Se déconnecter</a>
       </nav>
     </header>

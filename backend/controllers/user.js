@@ -110,11 +110,11 @@ exports.modify = (req, res, next) => {
 
 exports.display = (req, res, next) => {
     if (req.method == "GET") {
-        let email = req.body.email;
-        let displayUser = `SELECT * FROM users WHERE email = '${email}';`;
-        sql.query(displayUser, function (err) {
-            if (!err) {
-                res.status(200).json({ message: "L'utilisateur a bien été affiché !" })
+        let token_user = req.params.token_user;
+        let displayUser = `SELECT users.email, users.password, users.first_name, users.last_name FROM users WHERE users.token_user = '${token_user}'`;
+        sql.query(displayUser, function (err, result) {
+            if (result.length > 0) {
+                res.status(200).json({ result })
             } else {
                 res.status(401).json({ message: "Erreur dans la récupération du profile !" })
             }
