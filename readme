@@ -42,9 +42,9 @@ ROUTES:
 user : 
 post /api/auth/signup
 post /api/auth/login
-put /api/auth/update/:id
-get /api/auth/profile/:id
-Delete /api/auth/delete/:id
+put /api/auth/update/:token_user
+get /api/auth/profile/:token_user
+Delete /api/auth/delete/:token_user
 
 publication:
 post /api/posts

@@ -3,7 +3,7 @@ const fs = require('fs');
 
 exports.createPosts = (req, res, next) => {
     if (req.method == "POST") {
-        let token_user = sessionStorage.getItem('token_user'); 
+        let token_user = req.params.token_user;
         let imageUrl = req.body.imageUrl;
         let content = req.body.content;
         let postSQL = `INSERT INTO posts (imageUrl, content, token_user, post_create) VALUES ('${imageUrl}', '${content}', '${token_user}', NOW());`;
@@ -11,7 +11,7 @@ exports.createPosts = (req, res, next) => {
             if (result) {
                 res.status(200).json({ message: "La publication a bien été postée !" })
             } else {
-                res.status(401).json({ err })
+                res.status(401).json({ message: "La publication n'a pas été postée !" })
             }
         })
     }
@@ -73,11 +73,12 @@ exports.deletePosts = (req, res, next) => {
     }
 };
 
-exports.postComments = (req, res, next) => { //erreur
+exports.postComments = (req, res, next) => {
     if (req.method == "POST") {
-        let postContent = req.params.content;
-        let user_id = req.params.user_id;
-        let SQLComments = `INSERT INTO comments (content, user_id) VALUES ('${postContent}', '${user_id}', NOW());`;
+        let token_user = req.params.token_user;
+        let post_id = req.body.post_id;
+        let postContent = req.body.content;
+        let SQLComments = `INSERT INTO comments (content, post_id, token_user, date_comment) VALUES ('${postContent}', '${post_id}','${token_user}', NOW());`;
         sql.query(SQLComments, function (err, result) {
             if (result) {
                 return res.status(200).json({ message: "Commentaire bien publié !" })
@@ -88,16 +89,18 @@ exports.postComments = (req, res, next) => { //erreur
     }
 };
 
-exports.modifyComments = (req, res, next) => { //erreur
+exports.modifyComments = (req, res, next) => {
     if (req.method == "PUT") {
-        let modifyComments = req.params.content;
-        let user_id = req.params.user_id;
-        let SQLModifyComments = `INSERT INTO comments (content, user_id) VALUES ('${postContent}', '${user_id}', NOW());`;
+        let token_user = req.params.token_user;
+        let post_id = req.params.id;
+        let id = req.body.id;
+        let postContent = req.body.content;
+        let SQLModifyComments = `UPDATE comments SET content = '${postContent}', post_id = '${post_id}', token_user = '${token_user}', date_comment = NOW() WHERE id = '${id}'`;
         sql.query(SQLModifyComments, function (err, result) {
             if (result) {
-                return res.status(200).json({ message: "Commentaire bien publié !" })
+                return res.status(200).json({ message: "Commentaire bien modifié !" })
             } else {
-                return res.status(403).json({ message: "Erreur dans la publication du commentaire !" })
+                return res.status(403).json({ err })
             }
         })
     }

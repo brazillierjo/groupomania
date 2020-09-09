@@ -29,6 +29,8 @@
 
 
 <script>
+const token_user = sessionStorage.getItem("token_user");
+
 import headerPosts from "@/components/headerPosts.vue";
 
 export default {
@@ -46,9 +48,9 @@ export default {
   methods: {
     postNow() {
       this.$axios
-        .post(`http://localhost:3000/api/post`, {
-          content: this.content,
+        .post(`http://localhost:3000/api/post/${token_user}`, {
           imageUrl: (this.selectedFile = event.target.files[0]),
+          content: this.content,
         })
         .then((response) => {
           console.log(response);

@@ -10,10 +10,10 @@ exports.signup = (req, res, next) => {
         let password = req.body.password;
         let first_name = req.body.first_name;
         let last_name = req.body.last_name;
-        let token_user = uuidv4();
+        let token_userGen = uuidv4();
 
         bcrypt.hash(password, 10, function (err, hash) {
-            let sqlSignup = `INSERT INTO users (email, password, first_name, last_name, token_user) VALUES ('${email}', '${hash}', '${first_name}', '${last_name}', '${token_user}')`;
+            let sqlSignup = `INSERT INTO users (email, password, first_name, last_name, token_user) VALUES ('${email}', '${hash}', '${first_name}', '${last_name}', '${token_userGen}')`;
             sql.query(sqlSignup, function (err, result) {
                 if (!err) {
                     let sqlLogin = `SELECT users.email, users.password, users.id, users.token_user FROM users WHERE email = '${email}'`;
@@ -79,10 +79,11 @@ exports.login = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
     if (req.method == "DELETE") {
-        let userId = req.params.id;
-        let deleteUser = `DELETE FROM users WHERE id = '${userId}'`;
-        sql.query(deleteUser, function (err) {
-            if (!err) {
+        let token_user = req.params.token_user;
+        let deleteUser = `DELETE FROM users WHERE users.token_user = '${token_user}'`;
+        sql.query(deleteUser, function (err, result) {
+            console.log(result)
+            if (result.affectedRows > 0) {
                 res.status(200).json({ message: "L'utilisateur a bien été supprimé !" })
             } else {
                 res.status(500).json({ message: "Erreur User" })
@@ -93,17 +94,21 @@ exports.delete = (req, res, next) => {
 
 exports.modify = (req, res, next) => {
     if (req.method == "PUT") {
-        let email = encodeURI(req.body.email);
-        let userId = req.params.id;
+        let email = req.body.email;
         let firstName = req.body.first_name;
         let lastName = req.body.last_name;
-        let updateUser = `UPDATE users SET first_name = '${firstName}', last_name = '${lastName}' WHERE email = '${email}';`;
-        sql.query(updateUser, function (err) {
-            if (!err) {
-                res.status(200).json({ message: "L'utilisateur a bien été modifié !" })
-            } else {
-                res.status(401).json({ message: "Aucune modification apportée !" })
-            }
+        let password = req.body.password;
+        let token_user = req.params.token_user
+
+        bcrypt.hash(password, 10, function (err, hash) {
+            let updateUser = `UPDATE users SET first_name = '${firstName}', last_name = '${lastName}', email = '${email}', password = '${hash}' WHERE token_user = '${token_user}';`;
+            sql.query(updateUser, function (err) {
+                if (!err) {
+                    res.status(200).json({ message: "L'utilisateur a bien été modifié !" })
+                } else {
+                    res.status(401).json({ message: "Aucune modification apportée !" })
+                }
+            })
         })
     }
 };
