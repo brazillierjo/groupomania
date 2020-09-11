@@ -4,3 +4,4 @@ like et dislike à finir
 Frontend :
 Publier du contenu
 importer images page post publications
+affichier, modifier et supprimer commentaire

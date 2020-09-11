@@ -14,9 +14,14 @@
               placeholder="Description"
               class="input-1"
             />
-            <div class="import-file">
-              <input type="file" />
-              <button @click="postNow"></button>
+            <div class="custom-file">
+              <input
+                name="imageUrl"
+                type="file"
+                class="custom-file-input"
+                required
+                @change="onSelectedFile"
+              />
             </div>
           </div>
           <input type="submit" name="upload" class="btn" />
@@ -46,12 +51,17 @@ export default {
     headerPosts,
   },
   methods: {
+    onSelectedFile(event) {
+      console.log(event);
+      this.selectedFile = event.target.files[0];
+    },
     postNow() {
+      const formData = new FormData();
+      formData.append("content", this.$data.content);
+      formData.append("selectedFile", this.$data.imageUrl);
+
       this.$axios
-        .post(`http://localhost:3000/api/post/${token_user}`, {
-          imageUrl: (this.selectedFile = event.target.files[0]),
-          content: this.content,
-        })
+        .post(`http://localhost:3000/api/posts/${token_user}`, formData)
         .then((response) => {
           console.log(response);
           location.href = "/posts";

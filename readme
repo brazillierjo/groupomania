@@ -50,11 +50,11 @@ publication:
 post /api/posts
 post /api/posts/:id/like/
 get /api/posts
-get /api/posts/:id // requete pour get les comments
+get /api/posts/:token_user/comments/:id // requete pour get les comments
 put /api/posts/:id
 delete /api/posts/:id
 
 comments:
-post /api/posts/:id/comments
-put /api/posts/:id/comments/:id
-delete /api/posts/:id/comments/:id
+post /api/posts/:token_user/comments
+put /api/posts/:token_user/comments/:id
+delete /api/posts/:token_user/comments/:id

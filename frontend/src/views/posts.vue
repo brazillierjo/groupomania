@@ -9,7 +9,7 @@
           <div class="time-post">{{ post.post_create }}</div>
         </div>
         <div>
-          <img class="image-post" src="..\assets\test-post.jpg" title="post-img" />
+          <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
         </div>
         <div class="post-content">{{ post.content }}</div>
       </div>
@@ -50,7 +50,10 @@ export default {
   beforeMount() {
     this.$axios
       .get(`http://localhost:3000/api/posts/`)
-      .then((response) => (this.posts = response.data.result))
+      .then((response) => {
+        this.posts = response.data.result
+        console.log(response)
+      })
       .catch((error) => {
         console.log(error);
       });

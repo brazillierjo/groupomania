@@ -3,8 +3,11 @@ const fs = require('fs');
 
 exports.createPosts = (req, res, next) => {
     if (req.method == "POST") {
+        let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        console.log(imageUrl);
+        console.log(req.file)
+
         let token_user = req.params.token_user;
-        let imageUrl = req.body.imageUrl;
         let content = req.body.content;
         let postSQL = `INSERT INTO posts (imageUrl, content, token_user, post_create) VALUES ('${imageUrl}', '${content}', '${token_user}', NOW());`;
         sql.query(postSQL, function (err, result) {
@@ -19,7 +22,7 @@ exports.createPosts = (req, res, next) => {
 
 exports.getAllPosts = (req, res, next) => {
     if (req.method == "GET") {
-        let allPostReq = `SELECT users.first_name, users.last_name, posts.post_create, posts.content FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
+        let allPostReq = `SELECT users.first_name, users.last_name, posts.post_create, posts.content, posts.imageUrl FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
         sql.query(allPostReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -73,26 +76,40 @@ exports.deletePosts = (req, res, next) => {
     }
 };
 
+exports.getAllcomments = (req, res, next) => {
+    if (req.method == "GET") {
+        let post_id = req.body.id;
+        let displayComments = `SELECT comments.content, users.first_name, users.last_name FROM comments INNER JOIN users ON comments.token_user = users.token_user WHERE comments.post_id = ${post_id};`
+        sql.query(displayComments, function (err, result) {
+            if (result) {
+                return res.status(200).json({ message: "Commentaire bien affiché !" })
+            } else {
+                return res.status(403).json({ err })
+            }
+        })
+    }
+}
+
 exports.postComments = (req, res, next) => {
     if (req.method == "POST") {
         let token_user = req.params.token_user;
-        let post_id = req.body.post_id;
+        let post_id = req.body.id;
         let postContent = req.body.content;
         let SQLComments = `INSERT INTO comments (content, post_id, token_user, date_comment) VALUES ('${postContent}', '${post_id}','${token_user}', NOW());`;
         sql.query(SQLComments, function (err, result) {
             if (result) {
                 return res.status(200).json({ message: "Commentaire bien publié !" })
             } else {
-                return res.status(403).json({ message: "Erreur dans la publication du commentaire !" })
+                return res.status(403).json({ message: err })
             }
         })
     }
 };
 
-exports.modifyComments = (req, res, next) => {
+exports.modifyComments = (req, res, next) => { // A finir
     if (req.method == "PUT") {
         let token_user = req.params.token_user;
-        let post_id = req.params.id;
+        let post_id = req.body.id;
         let id = req.body.id;
         let postContent = req.body.content;
         let SQLModifyComments = `UPDATE comments SET content = '${postContent}', post_id = '${post_id}', token_user = '${token_user}', date_comment = NOW() WHERE id = '${id}'`;
@@ -106,9 +123,9 @@ exports.modifyComments = (req, res, next) => {
     }
 };
 
-exports.deleteComments = (req, res, next) => {
+exports.deleteComments = (req, res, next) => { // A finir
     if (req.method == "DELETE") {
-        let idComments = req.params.commentId;
+        let idComments = req.body.commentId;
         let SQLDeleteComments = `DELETE FROM comments WHERE id = '${idComments}'`;
         sql.query(SQLDeleteComments, function (err, result) {
             if (result) {
