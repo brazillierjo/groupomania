@@ -107,44 +107,5 @@ export default {
 </script>
 
 <style>
-* {
-  font-family: "Open Sans Condensed", sans-serif;
-}
-
-.container-profile {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 30px;
-  background-color: white;
-  width: 50%;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-}
-
-.header-profile {
-  width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-}
-
-.user-first_name,
-.user-last_name,
-.user-email,
-.user-password {
-  text-align: left;
-  padding: 10px;
-}
-
-.button-profile {
-  text-align: right;
-}
-
-.input {
-  text-align: left;
-  width: 100%;
-  margin-bottom: 5px;
-  padding: 8px 12px;
-  box-sizing: border-box;
-  border-radius: 3px;
-}
+@import '../style.css';
 </style>

@@ -9,9 +9,10 @@
         <div class="header-post">
           <div class="user-id">{{ post.first_name + ' ' + post.last_name }}</div>
           <div class="time-post">{{ post.post_create }}</div>
+          <div class="id-post">{{ post.id }}</div>
         </div>
         <div>
-          <img class="image-post" src="..\assets\test-post.jpg" title="post-img" />
+          <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
         </div>
         <div class="post-content">{{ post.content }}</div>
       </div>
@@ -25,6 +26,12 @@
         <button @click="showComments = !showComments" class="see-comments">
           <i class="fas fa-comments"></i>
         </button>
+        <button @click="editPost" class="see-comments">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button @click="deletePost" class="see-comments">
+          <i class="fas fa-trash-alt"></i>
+        </button>
       </div>
       <comments v-if="showComments" />
     </div>
@@ -33,6 +40,7 @@
 
 <script>
 const token_user = sessionStorage.getItem("token_user");
+
 import headerPosts from "@/components/headerPosts.vue";
 import comments from "@/components/comments.vue";
 
@@ -51,16 +59,41 @@ export default {
   beforeMount() {
     this.$axios
       .get(`http://localhost:3000/api/posts/${token_user}`)
-      .then((response) => (this.posts = response.data.result))
+      .then((response) => {
+        this.posts = response.data.result;
+        console.log(response);
+      })
       .catch((error) => {
         console.log(error);
       });
+  },
+  methods: {
+    editPost() {
+      this.$axios
+        .put(`http://localhost:3000/api/posts/`)
+        .then((response) => {
+          console.log(response);
+          location.href = `/myposts/${token_user}`;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deletePost() {
+      this.$axios
+        .delete(`http://localhost:3000/api/posts/`)
+        .then((response) => {
+          console.log(response);
+          location.href = `/myposts/${token_user}`;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
 
 <style>
-* {
-  font-family: "Open Sans Condensed", sans-serif;
-}
+@import '../style.css';
 </style>

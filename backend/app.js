@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
 const connectSQL = require('./mysql');
 app.use(bodyParser.json());
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images/', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api/posts', postsRoutes);
 

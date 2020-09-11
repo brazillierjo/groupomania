@@ -36,31 +36,5 @@ export default {
 
 
 <style>
-* {
-  font-family: "Open Sans Condensed", sans-serif;
-}
-
-.logo-header-log {
-  height: 50px;
-  margin: 0;
-  padding: 0;
-}
-
-header {
-  background-color: white;
-  border-radius: 2px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-nav {
-  width: 50%;
-  display: flex;
-  justify-content: space-between;
-  vertical-align: middle;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
+@import '../style.css';
 </style>

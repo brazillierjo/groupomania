@@ -8,7 +8,7 @@ router.get('/', auth, postCtrl.getAllPosts);
 router.get('/:token_user', auth, postCtrl.getOnePosts);
 router.post('/:token_user', auth, multer, postCtrl.createPosts);
 router.put('/:token_user', auth, multer, postCtrl.modifyPosts);
-router.delete('/:token_user', auth, postCtrl.deletePosts);
+router.delete('/posts/:token_user/:post_id', auth, postCtrl.deletePosts);
 router.post('/:id/like', auth, postCtrl.postLikes);
 router.get('/comments/:id', auth, postCtrl.getAllcomments);
 router.post('/:token_user/comments/:id', auth, postCtrl.postComments);

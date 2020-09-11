@@ -7,6 +7,7 @@
         <div class="header-post">
           <div class="user-id">{{ post.first_name + ' ' + post.last_name }}</div>
           <div class="time-post">{{ post.post_create }}</div>
+          <div class="id-post">{{ post.id }}</div>
         </div>
         <div>
           <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
@@ -24,7 +25,7 @@
           <i class="fas fa-comments"></i>
         </button>
       </div>
-      <comments v-if="showComments" />
+      <comments v-if="showComments" v-bind:props_post_id="post.id" />
     </div>
   </div>
 </template>
@@ -36,6 +37,12 @@ import addPost from "@/components/addPost.vue";
 
 export default {
   name: "posts",
+  props: {
+    props_post_id: Number,
+    first_name: String,
+    last_name: String,
+    date_comment: String,
+  },
   data: () => {
     return {
       showComments: false,
@@ -51,8 +58,7 @@ export default {
     this.$axios
       .get(`http://localhost:3000/api/posts/`)
       .then((response) => {
-        this.posts = response.data.result
-        console.log(response)
+        this.posts = response.data.result;
       })
       .catch((error) => {
         console.log(error);
@@ -62,88 +68,5 @@ export default {
 </script>
 
 <style>
-* {
-  font-family: "Open Sans Condensed", sans-serif;
-}
-
-.container-post {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 30px;
-  background-color: white;
-  width: 50%;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-}
-
-.header-post {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-}
-
-.user-id {
-  text-align: left;
-  padding: 10px;
-}
-
-.time-post {
-  padding: 10px;
-  color: gray;
-}
-
-.image-post {
-  width: 300px;
-}
-
-.post-content {
-  text-align: left;
-  padding: 10px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-}
-
-.like-comments {
-  margin-top: 1px;
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-
-.like,
-.dislike,
-.see-comments {
-  background-color: white;
-  width: 50px;
-  height: 30px;
-  border-radius: 2px;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.fa-thumbs-up,
-.fa-thumbs-down,
-.fa-comments {
-  font-size: 1.3em;
-}
-
-.fa-thumbs-up {
-  color: blue;
-}
-
-.fa-thumbs-down {
-  color: red;
-}
-
-.fa-comments {
-  color: green;
-}
-
-.see-comments {
-  border-radius: 3px;
-  justify-content: right;
-}
+@import '../style.css';
 </style>
