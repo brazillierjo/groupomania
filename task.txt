@@ -6,4 +6,3 @@ Publier du contenu
 importer images page post publications
 affichier, modifier et supprimer commentaire
 Supprimer et modifier un post
-Input deja tapée

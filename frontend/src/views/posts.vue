@@ -25,7 +25,7 @@
           <i class="fas fa-comments"></i>
         </button>
       </div>
-      <comments v-if="showComments" v-bind:props_post_id="post.id" />
+      <comments v-if="showComments" v-bind:post_id="post.id" />
     </div>
   </div>
 </template>
@@ -37,12 +37,6 @@ import addPost from "@/components/addPost.vue";
 
 export default {
   name: "posts",
-  props: {
-    props_post_id: Number,
-    first_name: String,
-    last_name: String,
-    date_comment: String,
-  },
   data: () => {
     return {
       showComments: false,
@@ -59,6 +53,7 @@ export default {
       .get(`http://localhost:3000/api/posts/`)
       .then((response) => {
         this.posts = response.data.result;
+        console.log(response)
       })
       .catch((error) => {
         console.log(error);

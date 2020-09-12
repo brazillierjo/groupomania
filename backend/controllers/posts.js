@@ -82,7 +82,7 @@ exports.getAllcomments = (req, res, next) => {
         let displayComments = `SELECT comments.content, comments.date_comment, users.first_name, users.last_name FROM comments INNER JOIN users ON comments.token_user = users.token_user WHERE post_id = ${post_id};`
         sql.query(displayComments, function (err, result) {
             if (result) {
-                return res.status(200).json({ message: "Commentaires bien affiché !" })
+                return res.status(200).json({ result })
             } else {
                 return res.status(403).json({ err })
             }
