@@ -21,7 +21,7 @@ exports.createPosts = (req, res, next) => {
 
 exports.getAllPosts = (req, res, next) => {
     if (req.method == "GET") {
-        let allPostReq = `SELECT users.first_name, users.last_name, posts.post_create, posts.content, posts.imageUrl, posts.id FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
+        let allPostReq = `SELECT users.first_name, users.last_name, posts.content, posts.imageUrl, posts.id, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
         sql.query(allPostReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -79,7 +79,7 @@ exports.deletePosts = (req, res, next) => {
 exports.getAllcomments = (req, res, next) => {
     if (req.method == "GET") {
         let post_id = req.params.id;
-        let displayComments = `SELECT comments.content, comments.date_comment, users.first_name, users.last_name FROM comments INNER JOIN users ON comments.token_user = users.token_user WHERE post_id = ${post_id};`
+        let displayComments = `SELECT comments.content, comments.date_comment, comments.id, users.first_name, users.last_name FROM comments INNER JOIN users ON comments.token_user = users.token_user WHERE post_id = ${post_id};`
         sql.query(displayComments, function (err, result) {
             if (result) {
                 return res.status(200).json({ result })
@@ -109,10 +109,9 @@ exports.postComments = (req, res, next) => {
 exports.modifyComments = (req, res, next) => { // A finir
     if (req.method == "PUT") {
         let token_user = req.params.token_user;
-        let post_id = req.body.id;
-        let id = req.body.id;
+        let id = req.params.id;
         let postContent = req.body.content;
-        let SQLModifyComments = `UPDATE comments SET content = '${postContent}', post_id = '${post_id}', token_user = '${token_user}', date_comment = NOW() WHERE id = '${id}'`;
+        let SQLModifyComments = `UPDATE comments SET content = '${postContent}', token_user = '${token_user}', date_comment = NOW() WHERE id = '${id}'`;
         sql.query(SQLModifyComments, function (err, result) {
             if (result) {
                 return res.status(200).json({ message: "Commentaire bien modifié !" })

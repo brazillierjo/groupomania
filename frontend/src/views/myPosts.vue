@@ -46,6 +46,9 @@ import comments from "@/components/comments.vue";
 
 export default {
   name: "postsID",
+    props: {
+    post_id: Number,
+  },
   data: () => {
     return {
       showComments: false,

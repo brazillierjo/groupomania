@@ -7,7 +7,6 @@
         <div class="header-post">
           <div class="user-id">{{ post.first_name + ' ' + post.last_name }}</div>
           <div class="time-post">{{ post.post_create }}</div>
-          <div class="id-post">{{ post.id }}</div>
         </div>
         <div>
           <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
@@ -25,7 +24,7 @@
           <i class="fas fa-comments"></i>
         </button>
       </div>
-      <comments v-if="showComments" v-bind:post_id="post.id" />
+      <comments v-if="showComments" v-bind:post_id="post.id" v-bind:first_name="post.first_name" v-bind:last_name="post.last_name" />
     </div>
   </div>
 </template>

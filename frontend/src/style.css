@@ -296,10 +296,10 @@
   
   .display-comments {
     height: 50px;
-    margin-top: 5px;
     display: flex;
     justify-content: space-around;
     border: 1px solid lightgrey;
+    padding-bottom: 5px;
   }
   
   .comment-content {
