@@ -52,7 +52,6 @@ export default {
       .get(`http://localhost:3000/api/posts/`)
       .then((response) => {
         this.posts = response.data.result;
-        console.log(response)
       })
       .catch((error) => {
         console.log(error);

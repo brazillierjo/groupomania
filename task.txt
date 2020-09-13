@@ -1,8 +1,5 @@
-Routes à modifier/faire : 
-like et dislike à finir
-
-Frontend :
+Update info mon compte
 Publier du contenu
-importer images page post publications
-affichier, modifier et supprimer commentaire
+modifier et supprimer commentaire Si OWNER
 Supprimer et modifier un post
+liker et disliker du contenu
