@@ -1,6 +1,6 @@
  <template>
   <div>
-    <header>
+    <header class="header-posts">
       <img class="logo-header-log" src="../assets\banner-groupomania.png" />
       <nav>
         <router-link :to="{ name: 'posts'}">Acceuil</router-link>

@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="header-posts">
     <img class="logo-header-log" src="../assets\banner-groupomania.png" />
     <nav>
       <router-link to="/">Se connecter</router-link>
@@ -15,5 +15,5 @@ export default {
 </script>
 
 <style>
-@import '../style.css';
+@import "../style.css";
 </style>

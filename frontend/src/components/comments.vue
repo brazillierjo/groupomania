@@ -1,21 +1,21 @@
 <template>
   <div class="container-comments">
+    <div v-for="comment in comments" :key="comment.id" class="display-comments">
+      <div class="header-comments">
+        <div class="user-id">{{ first_name }} {{ last_name }}</div>
+      </div>
+      <div class="comment-content">{{ comment.content }}</div>
+      <div class="button-comments">
+        <button @click="updateComment" class="update-comment">Modifier</button>
+        <button @click="deleteComment" class="delete-comment">Supprimer</button>
+      </div>
+    </div>
     <div>
       <form class="textarea-container" v-on:submit.prevent="sendComment">
         <div class="user_id">{{ first_name }} {{ last_name }}</div>
         <input v-model="content" placeholder="Écrivez un commentaire..." class="post-text-area" />
         <button class="send-comment">Publier</button>
       </form>
-      <div v-for="comment in comments" :key="comment.id" class="display-comments">
-        <div class="header-comments">
-          <div class="user-id">{{ first_name }} {{ last_name }}</div>
-        </div>
-        <div class="comment-content">{{ comment.content }}</div>
-        <div class="button-comments">
-          <button @click="updateComment" class="update-comment">Modifier</button>
-          <button @click="deleteComment" class="delete-comment">Supprimer</button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   props: {
     post_id: Number,
     first_name: String,
-    last_name: String
+    last_name: String,
   },
   data() {
     return {
@@ -56,9 +56,12 @@ export default {
     },
     updateComment() {
       this.$axios
-        .put(`http://localhost:3000/api/posts/${token_user}/comments/${this.$props.post_id}`, {
-          content: this.content,
-        })
+        .put(
+          `http://localhost:3000/api/posts/${token_user}/comments/${this.$props.post_id}`,
+          {
+            content: this.content,
+          }
+        )
         .then((response) => {
           console.log(response);
         })
@@ -73,10 +76,13 @@ export default {
     },
     deleteComment() {
       this.$axios
-        .delete(`http://localhost:3000/api/posts/${token_user}/comments/${this.$props.post_id}`, {
-          content: this.content,
-          post_id: this.comments.id,
-        })
+        .delete(
+          `http://localhost:3000/api/posts/${token_user}/comments/${this.$props.post_id}`,
+          {
+            content: this.content,
+            post_id: this.comments.id,
+          }
+        )
         .then((response) => {
           console.log(response);
         })

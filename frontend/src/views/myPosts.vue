@@ -7,33 +7,37 @@
     <div v-for="post in posts" :key="post.id" class="post-comments">
       <div class="container-post">
         <div class="header-post">
-          <div class="user-id">{{ post.first_name + ' ' + post.last_name }}</div>
+          <div class="user-id">
+            {{ post.first_name + " " + post.last_name }}
+          </div>
           <div class="time-post">{{ post.post_create }}</div>
           <div class="id-post">{{ post.id }}</div>
         </div>
         <div>
           <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
         </div>
-        <div class="post-content">{{ post.content }}</div>
+        <div class="post-content">
+          <div>{{ post.content }}</div>
+          <div class="like-comments">
+            <button class="like">
+              <i class="fas fa-thumbs-up"></i>
+            </button>
+            <button class="dislike">
+              <i class="fas fa-thumbs-down"></i>
+            </button>
+            <button @click="showComments = !showComments" class="see-comments">
+              <i class="fas fa-comments"></i>
+            </button>
+            <button @click="editPost" class="see-comments">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button @click="deletePost" class="see-comments">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+        <comments v-if="showComments" />
       </div>
-      <div class="like-comments">
-        <button class="like">
-          <i class="fas fa-thumbs-up"></i>
-        </button>
-        <button class="dislike">
-          <i class="fas fa-thumbs-down"></i>
-        </button>
-        <button @click="showComments = !showComments" class="see-comments">
-          <i class="fas fa-comments"></i>
-        </button>
-        <button @click="editPost" class="see-comments">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button @click="deletePost" class="see-comments">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-      </div>
-      <comments v-if="showComments" />
     </div>
   </div>
 </template>
@@ -46,7 +50,7 @@ import comments from "@/components/comments.vue";
 
 export default {
   name: "postsID",
-    props: {
+  props: {
     post_id: Number,
   },
   data: () => {
@@ -98,5 +102,5 @@ export default {
 </script>
 
 <style>
-@import '../style.css';
+@import "../style.css";
 </style>
