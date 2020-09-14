@@ -23,24 +23,18 @@
             <button class="dislike">
               <i class="fas fa-thumbs-down"></i>
             </button>
-            <button @click="postDetails" class="see-comments">
+            <button @click="postDetails(post.id)" class="see-comments">
               <i class="fas fa-comments"></i>
             </button>
           </div>
         </div>
       </div>
-      <comments
-        v-bind:post_id="post.id"
-        v-bind:first_name="post.first_name"
-        v-bind:last_name="post.last_name"
-      />
     </div>
   </div>
 </template>
 
 <script>
 import headerPosts from "@/components/headerPosts.vue";
-import comments from "@/components/comments.vue";
 import addPost from "@/components/addPost.vue";
 
 export default {
@@ -52,7 +46,6 @@ export default {
   },
   components: {
     headerPosts,
-    comments,
     addPost,
   },
   beforeMount() {
@@ -60,16 +53,17 @@ export default {
       .get(`http://localhost:3000/api/posts/`)
       .then((response) => {
         this.posts = response.data.result;
-        console.log(response.data.result)
       })
       .catch((error) => {
         console.log(error);
       });
   },
   methods: {
-    postDetails() {
-      this.$router.push({ name: "postDetails", params: { post_id: this.posts.post.id }})
-    }
+    postDetails(id_post) {
+      this.$router.push({
+        path: `/postDetails/${id_post}`,
+      });
+    },
   },
 };
 </script>

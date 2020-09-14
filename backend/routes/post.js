@@ -5,10 +5,11 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config')
 
 router.get('/', auth, postCtrl.getAllPosts);
-router.get('/:token_user', auth, postCtrl.getOnePosts);
+router.get('/profile/:token_user', auth, postCtrl.getPostsUser);
+router.get('/:id', auth, postCtrl.getOnePostId);
 router.post('/:token_user', auth, multer, postCtrl.createPosts);
 router.put('/:token_user', auth, multer, postCtrl.modifyPosts);
-router.delete('/posts/:token_user/:post_id', auth, postCtrl.deletePosts);
+router.delete('/posts/:token_user/:id', auth, postCtrl.deletePosts);
 router.post('/:id/like', auth, postCtrl.postLikes);
 router.get('/:token_user/comments/:id', auth, postCtrl.getAllcomments);
 router.post('/:token_user/comments/:id', auth, postCtrl.postComments);

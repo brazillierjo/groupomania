@@ -2,18 +2,38 @@
   <div class="container-comments">
     <div v-for="comment in comments" :key="comment.id" class="display-comments">
       <div class="header-comments">
-        <div class="user-id">{{ first_name }} {{ last_name }}</div>
+        <div class="user-id">{{ comment.first_name }} {{ comment.last_name }}</div>
       </div>
-      <div class="comment-content">{{ comment.content }}</div>
+      <p v-if="editComment" class="input">
+        <input class="input" required v-model="content" />
+      </p>
+      <p
+        v-else
+        class="comment-content"
+        placeholder="Écrivez votre nouveau commentaire..."
+      >
+        {{ comment.content }}
+      </p>
       <div class="button-comments">
-        <button @click="updateComment" class="update-comment">Modifier</button>
-        <button @click="deleteComment" class="delete-comment">Supprimer</button>
+        <button v-if="editComment" @click="editComment = false" class="update-comment">
+          <i class="fas fa-window-close"></i>
+        </button>
+        <button v-else @click="editComment = true" class="update-comment">
+          <i class="fas fa-pen"></i>
+        </button>
+        <button @click="deleteComment(comment.id)" class="delete-comment">
+          <i class="fas fa-trash-alt"></i>
+        </button>
       </div>
     </div>
     <div>
       <form class="textarea-container" v-on:submit.prevent="sendComment">
         <div class="user_id">{{ first_name }} {{ last_name }}</div>
-        <input v-model="content" placeholder="Écrivez un commentaire..." class="post-text-area" />
+        <input
+          v-model="content"
+          placeholder="Écrivez un commentaire..."
+          class="post-text-area"
+        />
         <button class="send-comment">Publier</button>
       </form>
     </div>
@@ -35,6 +55,7 @@ export default {
       comments: [],
       content: "",
       posts: [],
+      editComment: false,
     };
   },
   methods: {
@@ -48,22 +69,23 @@ export default {
         )
         .then((response) => {
           this.posts = response.data.result;
-          console.log(response);
+          location.reload();
         })
         .catch((error) => {
           error;
         });
     },
-    updateComment() {
+    updateComment(id_com) {
       this.$axios
         .put(
-          `http://localhost:3000/api/posts/${token_user}/comments/${this.$props.post_id}`,
+          `http://localhost:3000/api/posts/${token_user}/comments/${id_com}`,
           {
             content: this.content,
           }
         )
         .then((response) => {
           console.log(response);
+          location.reload();
         })
         .catch((error) => {
           if (error.response.status === 401) {
@@ -74,21 +96,18 @@ export default {
           }
         });
     },
-    deleteComment() {
+    deleteComment(id_com) {
       this.$axios
         .delete(
-          `http://localhost:3000/api/posts/${token_user}/comments/${this.$props.post_id}`,
-          {
-            content: this.content,
-            post_id: this.comments.id,
-          }
+          `http://localhost:3000/api/posts/${token_user}/comments/${id_com}`
         )
         .then((response) => {
           console.log(response);
+          location.reload();
         })
         .catch((error) => {
           if (error.response.status === 401) {
-            this.message = "Commentaire non modifié";
+            this.message = "Commentaire non supprimé";
           }
           if (error.response.status === 500) {
             this.message = "Erreur serveur";

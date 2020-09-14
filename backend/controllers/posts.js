@@ -32,10 +32,10 @@ exports.getAllPosts = (req, res, next) => {
     }
 };
 
-exports.getOnePosts = (req, res, next) => {
+exports.getPostsUser = (req, res, next) => {
     if (req.method == "GET") {
         let token_user = req.params.token_user;
-        let onePostsReq = `SELECT users.first_name, users.last_name, posts.post_create, posts.content, posts.id FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE users.token_user = '${token_user}';`;
+        let onePostsReq = `SELECT users.first_name, users.last_name, posts.content, posts.id, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE users.token_user = '${token_user}';`;
         sql.query(onePostsReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -45,6 +45,21 @@ exports.getOnePosts = (req, res, next) => {
         })
     }
 };
+
+exports.getOnePostId = (req, res, next) => {
+    if (req.method == "GET") {
+        let post_id = req.params.id;
+        let onePostsReq = `SELECT users.first_name, users.last_name, posts.content, posts.id, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE posts.id = '${post_id}';`;
+        sql.query(onePostsReq, function (err, result) {
+            if (result.length > 0) {
+                return res.status(200).json({ result })
+            } else {
+                return res.status(403).json({ message: 'Err 403' })
+            }
+        })
+    }
+};
+
 
 exports.modifyPosts = (req, res, next) => {
     if (req.method == "PUT") {
@@ -63,8 +78,8 @@ exports.modifyPosts = (req, res, next) => {
 
 exports.deletePosts = (req, res, next) => {
     if (req.method == "DELETE") {
-        let post_id = req.params.post_id;
         let token_user = req.params.token_user;
+        let post_id = req.params.id;
         let SQLDrop = `DELETE FROM posts WHERE token_user = ${token_user} AND id = '${post_id}'`;
         sql.query(SQLDrop, function (err, result) {
             if (result) {
@@ -106,12 +121,12 @@ exports.postComments = (req, res, next) => {
     }
 };
 
-exports.modifyComments = (req, res, next) => { // A finir
+exports.modifyComments = (req, res, next) => {
     if (req.method == "PUT") {
         let token_user = req.params.token_user;
         let id = req.params.id;
         let postContent = req.body.content;
-        let SQLModifyComments = `UPDATE comments SET content = '${postContent}', token_user = '${token_user}', date_comment = NOW() WHERE id = '${id}'`;
+        let SQLModifyComments = `UPDATE comments SET content = '${postContent}', token_user = '${token_user}', date_comment = NOW() WHERE token_user = '${token_user}' AND id = '${id}'`;
         sql.query(SQLModifyComments, function (err, result) {
             if (result) {
                 return res.status(200).json({ message: "Commentaire bien modifié !" })
@@ -122,15 +137,16 @@ exports.modifyComments = (req, res, next) => { // A finir
     }
 };
 
-exports.deleteComments = (req, res, next) => { // A finir
+exports.deleteComments = (req, res, next) => {
     if (req.method == "DELETE") {
-        let idComments = req.body.commentId;
-        let SQLDeleteComments = `DELETE FROM comments WHERE id = '${idComments}'`;
+        let idComments = req.params.id;
+        let token_user = req.params.token_user;
+        let SQLDeleteComments = `DELETE FROM comments WHERE token_user = '${token_user}' AND id = '${idComments}'`;
         sql.query(SQLDeleteComments, function (err, result) {
             if (result) {
-                return res.status(200).json({ message: "Commentaire bien publié !" })
+                return res.status(200).json({ message: "Commentaire bien supprimé !" })
             } else {
-                return res.status(403).json({ message: "Erreur dans la publication du commentaire !" })
+                return res.status(403).json({ err })
             }
         })
     }

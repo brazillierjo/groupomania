@@ -1,5 +1,5 @@
-Update info mon compte
-Publier du contenu
-modifier et supprimer commentaire Si OWNER
+Update info mon compte et commentaire
+Publier du contenu (photo/gif)
+modifier commentaire Si OWNER
 Supprimer et modifier un post
 liker et disliker du contenu

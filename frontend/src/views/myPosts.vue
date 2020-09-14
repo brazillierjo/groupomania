@@ -11,7 +11,7 @@
             {{ post.first_name + " " + post.last_name }}
           </div>
           <div class="time-post">{{ post.post_create }}</div>
-          <div class="id-post">{{ post.id }}</div>
+          <div class="time-post">{{ post.id }}</div>
         </div>
         <div>
           <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
@@ -25,18 +25,17 @@
             <button class="dislike">
               <i class="fas fa-thumbs-down"></i>
             </button>
-            <button @click="showComments = !showComments" class="see-comments">
+            <button @click="postDetails(post.id)" class="see-comments">
               <i class="fas fa-comments"></i>
             </button>
-            <button @click="editPost" class="see-comments">
+            <button @click="editPost(post.id)" class="see-comments">
               <i class="fas fa-edit"></i>
             </button>
-            <button @click="deletePost" class="see-comments">
+            <button @click="deletePost(post.id)" class="see-comments">
               <i class="fas fa-trash-alt"></i>
             </button>
           </div>
         </div>
-        <comments v-if="showComments" />
       </div>
     </div>
   </div>
@@ -46,7 +45,6 @@
 const token_user = sessionStorage.getItem("token_user");
 
 import headerPosts from "@/components/headerPosts.vue";
-import comments from "@/components/comments.vue";
 
 export default {
   name: "postsID",
@@ -55,17 +53,15 @@ export default {
   },
   data: () => {
     return {
-      showComments: false,
       posts: [],
     };
   },
   components: {
     headerPosts,
-    comments,
   },
   beforeMount() {
     this.$axios
-      .get(`http://localhost:3000/api/posts/${token_user}`)
+      .get(`http://localhost:3000/api/posts/profile/${token_user}`)
       .then((response) => {
         this.posts = response.data.result;
         console.log(response);
@@ -75,9 +71,14 @@ export default {
       });
   },
   methods: {
-    editPost() {
+    postDetails(id_post) {
+      this.$router.push({
+        path: `/postDetails/${id_post}`,
+      })
+    },
+    editPost(id_post) {
       this.$axios
-        .put(`http://localhost:3000/api/posts/`)
+        .put(`http://localhost:3000/api/posts/${token_user}/${id_post}`)
         .then((response) => {
           console.log(response);
           location.href = `/myposts/${token_user}`;
@@ -86,9 +87,9 @@ export default {
           console.log(error);
         });
     },
-    deletePost() {
+    deletePost(id_post) {
       this.$axios
-        .delete(`http://localhost:3000/api/posts/`)
+        .delete(`http://localhost:3000/api/posts/${token_user}/${id_post}`)
         .then((response) => {
           console.log(response);
           location.href = `/myposts/${token_user}`;

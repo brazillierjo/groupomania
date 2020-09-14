@@ -93,7 +93,6 @@ body {
   border: 1px solid #3897f0;
   padding: 5px 12px;
   color: #fff;
-  font-weight: bold;
   cursor: pointer;
   border-radius: 2px;
 }
@@ -173,7 +172,6 @@ nav {
   text-align: left;
   padding: 10px;
   height: 50%;
-  font-weight: bold;
 }
 
 .time-post,
@@ -240,12 +238,13 @@ nav {
   margin-bottom: 30px;
   background-color: white;
   width: 50%;
-  border: 1px solid black;
+  border: 1px solid lightgray;
   border-radius: 2px;
 }
 
 .button-comments {
-  padding: 5px;
+  padding-top: 5px;
+  border: none;
   text-align: center;
 }
 
@@ -256,10 +255,12 @@ nav {
 
 .post-text-area {
   padding: 2px;
+  border: none;
   border-radius: 2px;
   height: 30px;
   width: 80%;
   margin-top: 5px;
+  background-color: lightgray;
 }
 
 .send-comment {
@@ -278,8 +279,7 @@ nav {
   height: 50px;
   display: flex;
   justify-content: space-around;
-  border: 1px solid lightgrey;
-  padding-bottom: 5px;
+  padding-bottom: 15px;
 }
 
 .comment-content {
@@ -293,7 +293,7 @@ nav {
 .delete-comment {
   background-color: white;
   width: 50px;
-  border: 1px solid lightgrey;
+  border: none;
   border-radius: 2px;
 }
 
@@ -364,6 +364,11 @@ nav {
 
 .add-post {
   margin: 5px;
+}
+
+.fa-pen, .fa-trash-alt, .fa-window-close {
+  color: gray;
+  font-size: 0.8em;
 }
 
 /**************/
