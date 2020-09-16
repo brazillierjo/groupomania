@@ -10,25 +10,25 @@
         <div class="header-profile">
           <p v-if="edit" class="input">
             Entrez votre Prénom :
-            <input required v-model="first_name" />
+            <input class="input" required v-model="first_name" />
           </p>
           <p v-else class="user-first_name">Prénom : {{ user.first_name }}</p>
 
           <p v-if="edit" class="input">
             Entrez votre Nom :
-            <input required v-model="last_name" />
+            <input class="input" required v-model="last_name" />
           </p>
           <p v-else class="user-last_name">Prénom : {{ user.last_name }}</p>
 
           <p v-if="edit" class="input">
             Entrez votre adresse E-mail :
-            <input required v-model="email" />
+            <input class="input" required v-model="email" />
           </p>
           <p v-else class="user-email">Email : {{ user.email }}</p>
 
           <p v-if="edit" class="input">
             Entrez votre mot de passe :
-            <input required v-model="password" />
+            <input class="input" required v-model="password" />
           </p>
           <p v-else class="user-password">Mot de passe : ***********</p>
 

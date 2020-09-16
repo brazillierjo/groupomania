@@ -94,7 +94,7 @@ exports.deletePosts = (req, res, next) => {
 exports.getAllcomments = (req, res, next) => {
     if (req.method == "GET") {
         let post_id = req.params.id;
-        let displayComments = `SELECT comments.content, comments.date_comment, comments.id, users.first_name, users.last_name FROM comments INNER JOIN users ON comments.token_user = users.token_user WHERE post_id = ${post_id};`
+        let displayComments = `SELECT comments.content, comments.date_comment, comments.id, users.first_name, comments.token_user ,users.last_name FROM comments INNER JOIN users ON comments.token_user = users.token_user WHERE post_id = ${post_id};`
         sql.query(displayComments, function (err, result) {
             if (result) {
                 return res.status(200).json({ result })
@@ -154,14 +154,14 @@ exports.deleteComments = (req, res, next) => {
 
 exports.postLikes = (req, res, next) => { // A finir
     if (req.method == "POST") {
-        let bodyId = req.body.user_id;
-        let postId = req.params.id;
-        let ifExist = `SELECT IF (EXISTS (SELECT * FROM likes WHERE user_id = ${bodyId} AND post_id = ${postId}) 1, 0)`;
+        let token_user = req.body.token_user;
+        let postId = req.body.id;
+        let ifExist = `SELECT IF (EXISTS (SELECT * FROM likes WHERE token_user = ${token_user} AND post_id = ${postId}) 1, 0)`;
         sql.query(ifExist, function (err, result) {
             switch (result) {
                 case 0:
                     console.log(result + ' 0')
-                    let addLike = `INSERT INTO likes (user_id, post_id) VALUES (${bodyId}, ${postId})`;
+                    let addLike = `INSERT INTO likes (token_user, post_id, likes) VALUES ('${token_user}', '${postId}', likes + 1)`;
                     sql.query(addLike, function (err, result) {
                         if (result) {
                             return res.status(200).json({ message: "Like bien ajouté !" })
@@ -179,3 +179,6 @@ exports.postLikes = (req, res, next) => { // A finir
         })
     }
 };
+
+// let addDislike = `INSERT INTO likes (token_user, post_id, dislike) VALUES ('${token_user}', '${postId}', dislikes + 1)`;
+// let deleteLike = `DELETE FROM likes WHERE token_user = '${token_user}' AND post_id = '${postId}'`;

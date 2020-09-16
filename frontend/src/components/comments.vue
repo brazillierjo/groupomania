@@ -4,36 +4,30 @@
       <div class="header-comments">
         <div class="user-id">{{ comment.first_name }} {{ comment.last_name }}</div>
       </div>
-      <p v-if="editComment" class="input">
+      <p v-if="editComment" class="input">{{ comment.content }}</p>
+      <p v-else class="comment-content" placeholder="Écrivez votre nouveau commentaire...">
         <input class="input" required v-model="content" />
       </p>
-      <p
-        v-else
-        class="comment-content"
-        placeholder="Écrivez votre nouveau commentaire..."
-      >
-        {{ comment.content }}
-      </p>
-      <div class="button-comments">
+
+      <div v-show="showComment(comment)" class="button-comments">
         <button v-if="editComment" @click="editComment = false" class="update-comment">
-          <i class="fas fa-window-close"></i>
-        </button>
-        <button v-else @click="editComment = true" class="update-comment">
           <i class="fas fa-pen"></i>
         </button>
-        <button @click="deleteComment(comment.id)" class="delete-comment">
+        <button v-else @click="editComment = true" class="update-comment">
+          <i class="fas fa-window-close"></i>
+        </button>
+        <button v-if="editComment" @click="deleteComment(comment.id)" class="delete-comment">
           <i class="fas fa-trash-alt"></i>
+        </button>
+        <button v-else @click="editComment = true" class="update-comment">
+          <i @click="updateComment(comment.id)" class="fas fa-save"></i>
         </button>
       </div>
     </div>
     <div>
       <form class="textarea-container" v-on:submit.prevent="sendComment">
         <div class="user_id">{{ first_name }} {{ last_name }}</div>
-        <input
-          v-model="content"
-          placeholder="Écrivez un commentaire..."
-          class="post-text-area"
-        />
+        <input v-model="content" placeholder="Écrivez un commentaire..." class="post-text-area" />
         <button class="send-comment">Publier</button>
       </form>
     </div>
@@ -55,10 +49,18 @@ export default {
       comments: [],
       content: "",
       posts: [],
-      editComment: false,
+      editComment: true,
+      token_user: sessionStorage.getItem("token_user"),
     };
   },
+  computed: {},
   methods: {
+    showComment: function (comment) {
+      return this.token_user === comment.token_user;
+    },
+    shouldEditAndDelete(display) {
+      this.editComment = display;
+    },
     sendComment() {
       this.$axios
         .post(

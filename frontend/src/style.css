@@ -258,8 +258,8 @@ nav {
   border: none;
   border-radius: 2px;
   height: 30px;
-  width: 80%;
-  margin-top: 5px;
+  width: 60%;
+  margin: auto;
   background-color: lightgray;
 }
 
@@ -269,7 +269,9 @@ nav {
   border: none;
   border-radius: 2px;
   color: white;
-  margin: 5px;
+  margin: auto;
+  margin-left: 5px;
+  margin-right: 5px;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
@@ -355,8 +357,8 @@ nav {
 
 .input {
   text-align: left;
-  width: 100%;
-  margin-bottom: 5px;
+  width: 70%;
+  margin: auto;
   padding: 8px 12px;
   box-sizing: border-box;
   border-radius: 2px;
@@ -366,7 +368,7 @@ nav {
   margin: 5px;
 }
 
-.fa-pen, .fa-trash-alt, .fa-window-close {
+.fa-pen, .fa-trash-alt, .fa-window-close, .fa-save {
   color: gray;
   font-size: 0.8em;
 }

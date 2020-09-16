@@ -20,7 +20,7 @@
                 type="file"
                 class="custom-file-input"
                 required
-                @change="onSelectedFile"
+                @change="onSelectedFile($event)"
               />
             </div>
           </div>

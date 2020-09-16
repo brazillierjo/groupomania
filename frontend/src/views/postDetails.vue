@@ -35,8 +35,6 @@
 </template>
 
 <script>
-const postId = window.location.href.split("/")[4];
-
 import headerPosts from "@/components/headerPosts.vue";
 import comments from "@/components/comments.vue";
 
@@ -54,7 +52,7 @@ export default {
   },
   beforeMount() {
     this.$axios
-      .get(`http://localhost:3000/api/posts/${postId}`)
+      .get(`http://localhost:3000/api/posts/${this.post_id}`)
       .then((response) => {
         this.posts = response.data.result;
       })
@@ -62,6 +60,9 @@ export default {
         console.log(error);
       });
   },
+  created() {
+    this.post_id = this.$route.params.post_id;
+  }
 };
 </script>
 
