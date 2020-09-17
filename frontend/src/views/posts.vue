@@ -9,7 +9,6 @@
             {{ post.first_name + " " + post.last_name }}
           </div>
           <div class="time-post">{{ post.post_create }}</div>
-          <div class="time-post">{{ post.id }}</div>
         </div>
         <div>
           <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />

@@ -3,7 +3,7 @@
     <headerPosts />
     <div id="wrapper">
       <div class="main-content">
-        <form class method="post" v-on:submit.prevent="postNow">
+        <form class method="put" v-on:submit.prevent="updateNow()">
           <div class="overlap-text">
             <input
               id="content"
@@ -32,14 +32,14 @@
 </template>
 
 
-
 <script>
 const token_user = sessionStorage.getItem("token_user");
+let post_id = window.location.href.split('/')[5];
 
 import headerPosts from "@/components/headerPosts.vue";
 
 export default {
-  name: "posts",
+  name: "updatePost",
   data() {
     return {
       content: "",
@@ -54,31 +54,25 @@ export default {
       console.log(event.target.files[0]);
       this.image = event.target.files[0];
     },
-    postNow() {
+    updateNow() {
       const formData = new FormData();
       formData.append("content", this.$data.content);
       formData.append("image", this.$data.image);
 
       this.$axios
-        .post(`http://localhost:3000/api/posts/${token_user}`, formData)
+        .put(`http://localhost:3000/api/posts/${token_user}/${post_id}`, formData)
         .then((response) => {
-          console.log(response);
-          location.href = "/posts";
+          console.log(response)
+          location.href = `/myposts/${token_user}`;
         })
         .catch((error) => {
-          if (error.response.status === 401) {
-            this.message = "Erreur dans la publication";
-          }
-          if (error.response.status === 500) {
-            this.message = "Erreur serveur";
-          }
+          console.log(error);
         });
     },
   },
 };
 </script>
 
-
 <style>
-@import '../style.css';
+@import "../style.css";
 </style>

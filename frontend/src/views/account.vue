@@ -18,7 +18,7 @@
             Entrez votre Nom :
             <input class="input" required v-model="last_name" />
           </p>
-          <p v-else class="user-last_name">Prénom : {{ user.last_name }}</p>
+          <p v-else class="user-last_name">Nom : {{ user.last_name }}</p>
 
           <p v-if="edit" class="input">
             Entrez votre adresse E-mail :
@@ -28,9 +28,9 @@
 
           <p v-if="edit" class="input">
             Entrez votre mot de passe :
-            <input class="input" required v-model="password" />
+            <input type="password" class="input" required v-model="password" />
           </p>
-          <p v-else class="user-password">Mot de passe : ***********</p>
+          <p v-else class="user-password">Mot de passe : ********</p>
 
           <div class="button-profile">
             <button v-if="edit" @click="edit = false">Annuler les modifications</button>

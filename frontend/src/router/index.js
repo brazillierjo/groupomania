@@ -7,6 +7,7 @@ import account from '../views/account.vue'
 import myPosts from '../views/myPosts.vue'
 import publish from '../views/publish.vue'
 import postDetails from '../views/postDetails.vue'
+import updatePost from '../views/updatePost.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/postDetails/:post_id',
     name: 'postDetails',
     component: postDetails
+  },
+  {
+    path: '/updatePost/:token_user/:post_id',
+    name: 'updatePost',
+    component: updatePost
   }
 ]
 

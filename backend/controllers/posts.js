@@ -3,12 +3,11 @@ const fs = require('fs');
 
 exports.createPosts = (req, res, next) => {
     if (req.method == "POST") {
-        let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.name}`;
-        console.log('imageUrl ' + imageUrl);
-
+        console.log(req.file);
+        let image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
         let token_user = req.params.token_user;
         let content = req.body.content;
-        let postSQL = `INSERT INTO posts (imageUrl, content, token_user, post_create) VALUES ('${imageUrl}', '${content}', '${token_user}', NOW());`;
+        let postSQL = `INSERT INTO posts (imageUrl, content, token_user, post_create) VALUES ('${image}', '${content}', '${token_user}', NOW());`;
         sql.query(postSQL, function (err, result) {
             if (result) {
                 res.status(200).json({ message: "La publication a bien été postée !" })
@@ -35,7 +34,7 @@ exports.getAllPosts = (req, res, next) => {
 exports.getPostsUser = (req, res, next) => {
     if (req.method == "GET") {
         let token_user = req.params.token_user;
-        let onePostsReq = `SELECT users.first_name, users.last_name, posts.content, posts.id, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE users.token_user = '${token_user}';`;
+        let onePostsReq = `SELECT users.first_name, users.last_name, posts.content, posts.id, posts.imageUrl, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE users.token_user = '${token_user}';`;
         sql.query(onePostsReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -49,7 +48,7 @@ exports.getPostsUser = (req, res, next) => {
 exports.getOnePostId = (req, res, next) => {
     if (req.method == "GET") {
         let post_id = req.params.id;
-        let onePostsReq = `SELECT users.first_name, users.last_name, posts.content, posts.id, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE posts.id = '${post_id}';`;
+        let onePostsReq = `SELECT users.first_name, users.last_name, posts.content, posts.id, posts.imageUrl, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user WHERE posts.id = '${post_id}';`;
         sql.query(onePostsReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -64,13 +63,14 @@ exports.getOnePostId = (req, res, next) => {
 exports.modifyPosts = (req, res, next) => {
     if (req.method == "PUT") {
         let modifyContent = req.body.content;
-        let post_id = req.params.post_id;
-        let SQLModify = `UPDATE posts SET content = '${modifyContent}' WHERE id = '${post_id}'`;
+        let image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        let post_id = req.params.id;
+        let SQLModify = `UPDATE posts SET content = '${modifyContent}', imageUrl = '${image}' WHERE id = '${post_id}'`;
         sql.query(SQLModify, function (err, result) {
             if (result) {
                 return res.status(200).json({ message: 'Publication bien modifiée !' })
             } else {
-                return res.status(403).json({ message: "Modification non apportée !" })
+                return res.status(403).json({ err })
             }
         })
     }
@@ -80,12 +80,12 @@ exports.deletePosts = (req, res, next) => {
     if (req.method == "DELETE") {
         let token_user = req.params.token_user;
         let post_id = req.params.id;
-        let SQLDrop = `DELETE FROM posts WHERE token_user = ${token_user} AND id = '${post_id}'`;
+        let SQLDrop = `DELETE FROM posts WHERE token_user = '${token_user}' AND id = '${post_id}'`;
         sql.query(SQLDrop, function (err, result) {
             if (result) {
                 return res.status(200).json({ message: "Publication bien suprimée !" })
             } else {
-                return res.status(403).json({ message: "Modification non supprimée !" })
+                return res.status(403).json({ err })
             }
         })
     }
@@ -156,10 +156,10 @@ exports.postLikes = (req, res, next) => { // A finir
     if (req.method == "POST") {
         let token_user = req.body.token_user;
         let postId = req.body.id;
-        let ifExist = `SELECT IF (EXISTS (SELECT * FROM likes WHERE token_user = ${token_user} AND post_id = ${postId}) 1, 0)`;
+        let ifExist = `SELECT IF (EXISTS (SELECT * FROM likes WHERE token_user = '${token_user}' AND post_id = '${postId}') 1, 0)`;
         sql.query(ifExist, function (err, result) {
             switch (result) {
-                case 0:
+                case 0: //like
                     console.log(result + ' 0')
                     let addLike = `INSERT INTO likes (token_user, post_id, likes) VALUES ('${token_user}', '${postId}', likes + 1)`;
                     sql.query(addLike, function (err, result) {
@@ -169,12 +169,13 @@ exports.postLikes = (req, res, next) => { // A finir
                             return res.status(403).json({ message: "Erreur dans l'ajout du like !" })
                         }
                     })
-                case 1:
+
+                case 2: //dislike
                     console.log(result + ' 1')
 
                 default:
                     console.log(result + ' default')
-                    return res.status(404).json({ message: 'Erreur !' })
+                    return res.status(404).json({ err })
             }
         })
     }

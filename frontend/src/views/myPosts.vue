@@ -7,11 +7,8 @@
     <div v-for="post in posts" :key="post.id" class="post-comments">
       <div class="container-post">
         <div class="header-post">
-          <div class="user-id">
-            {{ post.first_name + " " + post.last_name }}
-          </div>
+          <div class="user-id">{{ post.first_name + " " + post.last_name }}</div>
           <div class="time-post">{{ post.post_create }}</div>
-          <div class="time-post">{{ post.id }}</div>
         </div>
         <div>
           <img class="image-post" v-bind:src="post.imageUrl" title="post-img" />
@@ -72,20 +69,10 @@ export default {
   },
   methods: {
     postDetails(id_post) {
-      this.$router.push({
-        path: `/postDetails/${id_post}`,
-      })
+        location.href = `/postDetails/${id_post}`;
     },
     editPost(id_post) {
-      this.$axios
-        .put(`http://localhost:3000/api/posts/${token_user}/${id_post}`)
-        .then((response) => {
-          console.log(response);
-          location.href = `/myposts/${token_user}`;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        window.location.href = `/updatePost/${token_user}/${id_post}`
     },
     deletePost(id_post) {
       this.$axios
