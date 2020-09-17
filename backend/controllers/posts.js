@@ -10,7 +10,7 @@ exports.createPosts = (req, res, next) => {
         let postSQL = `INSERT INTO posts (imageUrl, content, token_user, post_create) VALUES ('${image}', '${content}', '${token_user}', NOW());`;
         sql.query(postSQL, function (err, result) {
             if (result) {
-                res.status(200).json({ message: "La publication a bien été postée !" })
+                res.status(200).json({ result })
             } else {
                 res.status(401).json({ message: "La publication n'a pas été postée !" })
             }
@@ -20,7 +20,7 @@ exports.createPosts = (req, res, next) => {
 
 exports.getAllPosts = (req, res, next) => {
     if (req.method == "GET") {
-        let allPostReq = `SELECT users.first_name, users.last_name, posts.content, posts.imageUrl, posts.id, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
+        let allPostReq = `SELECT users.first_name, users.last_name, posts.content, posts.imageUrl, posts.id, posts.likes_number, DATE_FORMAT(posts.post_create, 'le %e %M %Y à %kh%i') AS post_create FROM posts INNER JOIN users ON posts.token_user = users.token_user;`;
         sql.query(allPostReq, function (err, result) {
             if (result.length > 0) {
                 return res.status(200).json({ result })
@@ -58,7 +58,6 @@ exports.getOnePostId = (req, res, next) => {
         })
     }
 };
-
 
 exports.modifyPosts = (req, res, next) => {
     if (req.method == "PUT") {
@@ -152,34 +151,42 @@ exports.deleteComments = (req, res, next) => {
     }
 };
 
-exports.postLikes = (req, res, next) => { // A finir
+exports.postLikes = (req, res, next) => {
     if (req.method == "POST") {
         let token_user = req.body.token_user;
-        let postId = req.body.id;
-        let ifExist = `SELECT IF (EXISTS (SELECT * FROM likes WHERE token_user = '${token_user}' AND post_id = '${postId}') 1, 0)`;
-        sql.query(ifExist, function (err, result) {
-            switch (result) {
-                case 0: //like
-                    console.log(result + ' 0')
-                    let addLike = `INSERT INTO likes (token_user, post_id, likes) VALUES ('${token_user}', '${postId}', likes + 1)`;
+        let post_id = req.params.id;
+        let ifExists = `SELECT IF (EXISTS (SELECT * FROM likes WHERE token_user = '${token_user}' AND post_id = '${post_id}'),'1', '0')`;
+        sql.query(ifExists, function (err, result) {
+            switch (parseInt(Object.values(result[0]))) {
+                case 0:
+                    let addLike = ` \
+                        INSERT INTO likes (token_user, post_id) VALUES ('${token_user}', '${post_id}'); \
+                        UPDATE posts SET likes_number = likes_number +1 WHERE id = '${post_id}' \
+                    `;
                     sql.query(addLike, function (err, result) {
                         if (result) {
-                            return res.status(200).json({ message: "Like bien ajouté !" })
+                            return res.status(200).json({ message: "Le post a bien été liké !" })
                         } else {
-                            return res.status(403).json({ message: "Erreur dans l'ajout du like !" })
+                            return res.status(403).json({ message: "Une erreur est survenue dans le like !" })
                         }
                     })
-
-                case 2: //dislike
-                    console.log(result + ' 1')
-
+                    break
+                case 1:
+                    let removeLike = " \
+                        DELETE FROM likes WHERE token_user = '" + token_user + "' AND post_id = '" + post_id + "'; \
+                        UPDATE posts SET likes_number = likes_number -1 WHERE id = '" + post_id + "' \
+                    " ;
+                    sql.query(removeLike, function (err, result) {
+                        if (result) {
+                            return res.status(200).json({ message: "Le like à était retiré !" })
+                        } else {
+                            return res.status(403).json({ message: "Une erreur est survenue dans le like !" })
+                        }
+                    })
+                    break
                 default:
-                    console.log(result + ' default')
-                    return res.status(404).json({ err })
+                    return res.status(404).json({ message: "Une erreur est survenue !" })
             }
         })
     }
 };
-
-// let addDislike = `INSERT INTO likes (token_user, post_id, dislike) VALUES ('${token_user}', '${postId}', dislikes + 1)`;
-// let deleteLike = `DELETE FROM likes WHERE token_user = '${token_user}' AND post_id = '${postId}'`;
