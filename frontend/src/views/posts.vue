@@ -15,7 +15,9 @@
           <div>{{ post.content }}</div>
           <div @click="like(post.id)" class="like-comments">
             <button class="like">
-              <i class="fas fa-thumbs-up"><span>{{ post.likes_number }}</span></i>
+              <i class="fas fa-thumbs-up">
+                <span>{{ post.likes_number }}</span>
+              </i>
             </button>
             <button class="dislike">
               <i class="fas fa-thumbs-down"></i>
@@ -52,7 +54,7 @@ export default {
     this.$axios
       .get(`http://localhost:3000/api/posts/`)
       .then((response) => {
-        console.log(response)
+        console.log(response);
         this.posts = response.data.result;
       })
       .catch((error) => {
@@ -66,6 +68,7 @@ export default {
           token_user: this.token_user,
         })
         .then((response) => {
+          location.reload();
           console.log(response);
         })
         .catch((error) => {

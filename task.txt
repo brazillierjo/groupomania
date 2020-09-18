@@ -1,2 +1,3 @@
 liker et disliker du contenu
 input ciblé
+compte admin
