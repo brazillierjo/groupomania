@@ -39,7 +39,7 @@ const token_user = sessionStorage.getItem("token_user");
 import headerPosts from "@/components/headerPosts.vue";
 
 export default {
-  name: "posts",
+  name: "publish",
   data() {
     return {
       content: "",

@@ -15,9 +15,11 @@
         </div>
         <div class="post-content">
           <div>{{ post.content }}</div>
-          <div class="like-comments">
+          <div @click="like(post.id)" class="like-comments">
             <button class="like">
-              <i class="fas fa-thumbs-up"></i>
+              <i class="fas fa-thumbs-up">
+                <span>{{ post.likes_number }}</span>
+              </i>
             </button>
             <button class="dislike">
               <i class="fas fa-thumbs-down"></i>
@@ -51,6 +53,7 @@ export default {
   data: () => {
     return {
       posts: [],
+      token_user: token_user,
     };
   },
   components: {
@@ -68,11 +71,24 @@ export default {
       });
   },
   methods: {
+    like(id_post) {
+      this.$axios
+        .post(`http://localhost:3000/api/posts/${id_post}/like`, {
+          token_user: this.token_user,
+        })
+        .then((response) => {
+          location.reload();
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     postDetails(id_post) {
-        location.href = `/postDetails/${id_post}`;
+      location.href = `/postDetails/${id_post}`;
     },
     editPost(id_post) {
-        window.location.href = `/updatePost/${token_user}/${id_post}`
+      window.location.href = `/updatePost/${token_user}/${id_post}`;
     },
     deletePost(id_post) {
       this.$axios
