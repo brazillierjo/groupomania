@@ -4,29 +4,46 @@
       <div class="header-comments">
         <div class="user-id">{{ comment.first_name }} {{ comment.last_name }}</div>
       </div>
-      <p v-if="editComment" class="input">{{ comment.content }}</p>
-      <p v-else class="comment-content" placeholder="Écrivez votre nouveau commentaire...">
+      <p v-if="comment == commentToEdit" class="comment-content">
         <input class="input" required v-model="content" />
       </p>
+      <p v-else class="input">{{ comment.content }}</p>
 
       <div v-show="showComment(comment)" class="button-comments">
-        <button v-if="editComment" @click="editComment = false" class="update-comment">
-          <i class="fas fa-pen"></i>
-        </button>
-        <button v-else @click="editComment = true" class="update-comment">
+
+        <button
+          v-if="comment == commentToEdit"
+          @click="editComment(null)"
+          class="update-comment"
+        >
           <i class="fas fa-window-close"></i>
         </button>
-        <button v-if="editComment" @click="deleteComment(comment.id)" class="delete-comment">
-          <i class="fas fa-trash-alt"></i>
+        <button 
+        v-else 
+        @click="editComment(comment)" 
+        class="update-comment">
+        <i class="fas fa-pen"></i>
         </button>
-        <button v-else @click="editComment = true" class="update-comment">
-          <i @click="updateComment(comment.id)" class="fas fa-save"></i>
+
+        <button
+          v-if="comment == commentToEdit"
+          @click="editComment(comment)"
+          class="update-comment"
+        >
+          <i @click="updateComment(comment.id)" 
+          class="fas fa-save"></i>
         </button>
+        <button 
+        v-else 
+        @click="deleteComment(comment.id)" 
+        class="delete-comment">
+        <i class="fas fa-trash-alt"></i>
+        </button>
+
       </div>
     </div>
     <div>
       <form class="textarea-container" v-on:submit.prevent="sendComment">
-        <div class="user_id">{{ first_name }} {{ last_name }}</div>
         <input v-model="content" placeholder="Écrivez un commentaire..." class="post-text-area" />
         <button class="send-comment">Publier</button>
       </form>
@@ -49,7 +66,7 @@ export default {
       comments: [],
       content: "",
       posts: [],
-      editComment: true,
+      commentToEdit: null,
       token_user: sessionStorage.getItem("token_user"),
     };
   },
@@ -60,6 +77,9 @@ export default {
     },
     shouldEditAndDelete(display) {
       this.editComment = display;
+    },
+    editComment(comment) {
+      this.commentToEdit = comment;
     },
     sendComment() {
       this.$axios

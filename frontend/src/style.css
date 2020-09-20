@@ -252,11 +252,6 @@ nav {
   text-align: center;
 }
 
-.textarea-container {
-  display: flex;
-  justify-content: space-between;
-}
-
 .post-text-area {
   padding: 2px;
   border: none;
