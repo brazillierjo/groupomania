@@ -116,8 +116,22 @@ exports.modify = (req, res, next) => {
 exports.display = (req, res, next) => {
     if (req.method == "GET") {
         let token_user = req.params.token_user;
-        let displayUser = `SELECT users.email, users.password, users.first_name, users.last_name FROM users WHERE users.token_user = '${token_user}'`;
+        let displayUser = `SELECT users.email, users.first_name, users.last_name FROM users WHERE users.token_user = '${token_user}'`;
         sql.query(displayUser, function (err, result) {
+            if (result.length > 0) {
+                res.status(200).json({ result })
+            } else {
+                res.status(401).json({ message: "Erreur dans la récupération du profile !" })
+            }
+        })
+    }
+};
+
+exports.getCurrentUser = (req, res, next) => {
+    if (req.method == "GET") {
+        let token_user = req.params.token_user;
+        let getCurrentUser = `SELECT users.email, users.first_name, users.isAdmin, users.last_name FROM users WHERE users.token_user = '${token_user}'`;
+        sql.query(getCurrentUser, function (err, result) {
             if (result.length > 0) {
                 res.status(200).json({ result })
             } else {

@@ -13,14 +13,34 @@
         </div>
         <div class="post-content">
           <div>{{ post.content }}</div>
-          <div @click="like(post.id)" class="like-comments">
-            <button class="like">
-              <i class="fas fa-thumbs-up">
-                <span>{{ post.likes_number }}</span>
-              </i>
+          <div class="lik-dis-com">
+            <div @click="like(post.id)" class="like-comments">
+              <button class="like">
+                <i class="fas fa-thumbs-up">
+                  <span>{{ post.likes_number }}</span>
+                </i>
+              </button>
+            </div>
+            <div @click="dislike(post.id)" class="like-comments">
+              <button class="dislike">
+                <i class="fas fa-thumbs-down">
+                  <span>{{ post.dislikes_number }}</span>
+                </i>
+              </button>
+            </div>
+            <button
+              v-if="shouldEditAndDeletePost(post)"
+              @click="editPost(post.id)"
+              class="see-comments"
+            >
+              <i class="fas fa-edit"></i>
             </button>
-            <button class="dislike">
-              <i class="fas fa-thumbs-down"></i>
+            <button
+              v-if="shouldEditAndDeletePost(post)"
+              @click="deletePost(post.id)"
+              class="see-comments"
+            >
+              <i class="fas fa-trash-alt"></i>
             </button>
             <button @click="postDetails(post.id)" class="see-comments">
               <i class="fas fa-comments"></i>
@@ -44,6 +64,7 @@ export default {
     return {
       posts: [],
       token_user: token_user,
+      currentUser: 0,
     };
   },
   components: {
@@ -52,9 +73,17 @@ export default {
   },
   beforeMount() {
     this.$axios
+      .get(`http://localhost:3000/api/auth/getCurrentUser/${token_user}/`)
+      .then((response) => {
+        this.currentUser = response.data.result[0];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    this.$axios
       .get(`http://localhost:3000/api/posts/`)
       .then((response) => {
-        console.log(response);
         this.posts = response.data.result;
       })
       .catch((error) => {
@@ -62,9 +91,27 @@ export default {
       });
   },
   methods: {
+    shouldEditAndDeletePost(post) {
+      return (
+        post.token_user == token_user || this.currentUser.isAdmin === 1
+      );
+    },
     like(id_post) {
       this.$axios
         .post(`http://localhost:3000/api/posts/${id_post}/like`, {
+          token_user: this.token_user,
+        })
+        .then((response) => {
+          location.reload();
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    dislike(id_post) {
+      this.$axios
+        .post(`http://localhost:3000/api/posts/${id_post}/dislike`, {
           token_user: this.token_user,
         })
         .then((response) => {
@@ -79,6 +126,20 @@ export default {
       this.$router.push({
         path: `/postDetails/${id_post}`,
       });
+    },
+    editPost(id_post) {
+      window.location.href = `/updatePost/${token_user}/${id_post}`;
+    },
+    deletePost(id_post) {
+      this.$axios
+        .delete(`http://localhost:3000/api/posts/${id_post}`)
+        .then((response) => {
+          console.log(response);
+          location.href = `/posts`;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

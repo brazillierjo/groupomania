@@ -4,9 +4,7 @@
     <div v-for="post in posts" :key="post.id" class="post-comments">
       <div class="container-post">
         <div class="header-post">
-          <div class="user-id">
-            {{ post.first_name + " " + post.last_name }}
-          </div>
+          <div class="user-id">{{ post.first_name + " " + post.last_name }}</div>
           <div class="time-post">{{ post.post_create }}</div>
           <div class="time-post">{{ post.id }}</div>
         </div>
@@ -15,13 +13,21 @@
         </div>
         <div class="post-content">
           <div>{{ post.content }}</div>
-          <div class="like-comments">
-            <button class="like">
-              <i class="fas fa-thumbs-up"></i>
-            </button>
-            <button class="dislike">
-              <i class="fas fa-thumbs-down"></i>
-            </button>
+          <div class="lik-dis-com">
+            <div @click="like(post.id)" class="like-comments">
+              <button class="like">
+                <i class="fas fa-thumbs-up">
+                  <span>{{ post.likes_number }}</span>
+                </i>
+              </button>
+            </div>
+            <div @click="dislike(post.id)" class="like-comments">
+              <button class="dislike">
+                <i class="fas fa-thumbs-down">
+                  <span>{{ post.dislikes_number }}</span>
+                </i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -35,6 +41,8 @@
 </template>
 
 <script>
+const token_user = sessionStorage.getItem("token_user");
+
 import headerPosts from "@/components/headerPosts.vue";
 import comments from "@/components/comments.vue";
 
@@ -44,11 +52,45 @@ export default {
     return {
       posts: [],
       post_id: "",
+      token_user: token_user,
     };
   },
   components: {
     headerPosts,
     comments,
+  },
+  methods: {
+    like(id_post) {
+      this.$axios
+        .post(`http://localhost:3000/api/posts/${id_post}/like`, {
+          token_user: this.token_user,
+        })
+        .then((response) => {
+          location.reload();
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    dislike(id_post) {
+      this.$axios
+        .post(`http://localhost:3000/api/posts/${id_post}/dislike`, {
+          token_user: this.token_user,
+        })
+        .then((response) => {
+          location.reload();
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    postDetails(id_post) {
+      this.$router.push({
+        path: `/postDetails/${id_post}`,
+      });
+    },
   },
   beforeMount() {
     this.$axios
@@ -62,7 +104,7 @@ export default {
   },
   created() {
     this.post_id = this.$route.params.post_id;
-  }
+  },
 };
 </script>
 

@@ -155,6 +155,7 @@ nav {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
+  margin-bottom: 60px;
   background-color: white;
   width: 50%;
   border: 1px solid rgba(219, 219, 219);
@@ -170,8 +171,11 @@ nav {
 .user-id,
 .user_id {
   text-align: left;
-  padding: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
   height: 50%;
+  width: 100px;
 }
 
 .time-post,
@@ -280,7 +284,6 @@ nav {
 .display-comments {
   height: 50px;
   display: flex;
-  justify-content: space-around;
   padding-bottom: 15px;
 }
 
@@ -357,7 +360,7 @@ nav {
 
 .input {
   text-align: left;
-  width: 70%;
+  width: 80%;
   margin: auto;
   padding: 8px 12px;
   box-sizing: border-box;
@@ -371,6 +374,10 @@ nav {
 .fa-pen, .fa-trash-alt, .fa-window-close, .fa-save {
   color: gray;
   font-size: 0.8em;
+}
+
+.lik-dis-com {
+  display: flex;
 }
 
 /**************/
