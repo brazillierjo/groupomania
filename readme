@@ -1,12 +1,13 @@
 backend > nodemon server
-
 frontend > npm run serve
-
 Terminal SQL > 
 cd "C:\Program Files\MySQL\MySQL Server 8.0\bin"
 mysql -u root -p
 
+
 *****************************************************
+
+
 TABLES SQL:
 
 users
@@ -22,6 +23,8 @@ content     | varchar(280)      | YES  |     | NULL    |
 imageUrl    | varchar(400)      | YES  |     | NULL    |                
 post_create | datetime          | YES  |     | NULL    |                
 user_id     | smallint unsigned | YES  | MUL | NULL
+likes_number| smallint unsigned 
+dislikes_number | smallint unsigned 
 
 comments
 content      | varchar(280)      | NO   |     | NULL
@@ -35,26 +38,9 @@ id      | smallint unsigned | NO   | PRI | NULL    | auto_increment
 user_id | smallint unsigned | YES  | MUL | NULL    |                
 post_id | smallint          | YES  | MUL | NULL
 likes   | INT | NO   
+
+dislikes
+id      | smallint unsigned | NO   | PRI | NULL    | auto_increment 
+user_id | smallint unsigned | YES  | MUL | NULL    |                
+post_id | smallint          | YES  | MUL | NULL
 dislikes| INT | NO
-
-**********************************************
-ROUTES:
-user : 
-post /api/auth/signup
-post /api/auth/login
-put /api/auth/update/:token_user
-get /api/auth/profile/:token_user
-Delete /api/auth/delete/:token_user
-
-publication:
-post /api/posts
-post /api/posts/:id/like/
-get /api/posts
-get /api/posts/:token_user/comments/:id // requete pour get les comments
-put /api/posts/:id
-delete /api/posts/:id
-
-comments:
-post /api/posts/:token_user/comments
-put /api/posts/:token_user/comments/:id
-delete /api/posts/:token_user/comments/:id
