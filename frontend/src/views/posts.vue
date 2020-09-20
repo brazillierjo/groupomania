@@ -92,9 +92,7 @@ export default {
   },
   methods: {
     shouldEditAndDeletePost(post) {
-      return (
-        post.token_user == token_user || this.currentUser.isAdmin === 1
-      );
+      return post.token_user == token_user || this.currentUser.isAdmin === 1;
     },
     like(id_post) {
       this.$axios

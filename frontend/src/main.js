@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import MicroModal from 'micromodal'; 
 
 axios.defaults.baseURL = 'http://localhost:3000/api/';
 const token = sessionStorage.getItem('token')
@@ -18,3 +19,5 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+MicroModal.init();

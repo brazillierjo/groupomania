@@ -1,3 +1,0 @@
-input ciblé
-
-ORDER BY decroissant
